@@ -29,11 +29,6 @@ namespace ConsoleAppExample
             while (true)
             {
                 MenuTheme menuTheme = new MenuTheme();
-                //menuTheme.FrameColor = ConsoleColor.DarkYellow;
-                //menuTheme.NormalFontColor = ConsoleColor.Yellow;
-                //menuTheme.NormalBackGroundColor = ConsoleColor.Black;
-                //menuTheme.AccentBackGroundColor = ConsoleColor.DarkYellow;
-                //menuTheme.AccentFontColor = ConsoleColor.DarkRed;
                 Menu menu = new Menu(menuTheme, cursorPosition, commands);
                 SwitchCommand(ref cursorPosition);
                 //Console.SetCursorPosition(menuPositionWidth, menuPositionHeigth);
