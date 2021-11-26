@@ -24,14 +24,15 @@ namespace ConsoleAppExample
             set { _menuWidth = value; }
         }
 
-        internal Menu(MenuTheme menuTheme, int cursorPosition, List<MenuItem> menuCommands)
+        public int cursorPosition = 0;
+
+        public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
         {
             Theme = menuTheme;
-            MenuWidth = CalculateMenuWidth(menuCommands);
-            RenderMenuFrame(menuCommands, cursorPosition);            
+            MenuWidth = CalculateMenuWidth(menuCommands);          
         }
-
-        internal int CalculateMenuWidth(List<MenuItem> commandsMenu)
+        
+        public int CalculateMenuWidth(List<MenuItem> commandsMenu)
         {
             int menuWidth = 0;
             int indent = 6;
@@ -46,7 +47,7 @@ namespace ConsoleAppExample
             return menuWidth + indent;
         }
 
-        internal void RenderMenuFrame(List<MenuItem> commands, in int cursorPosition)
+        public void RenderMenu(in List<MenuItem> commands)
         {
             String line = new(Theme.HorisontalLineElement, MenuWidth);
             SetFrameColor();
@@ -82,6 +83,18 @@ namespace ConsoleAppExample
                 }
             }
             Console.WriteLine($"{Theme.LeftBottomCorner}{line}{Theme.RightBottomCorner}");
+        }
+
+        public void NavigateUp(in List<MenuItem> commands)
+        {
+            cursorPosition--;
+            if (cursorPosition < 0) cursorPosition = commands.Count - 1;         
+        }
+
+        public void NavigateDown(in List<MenuItem> commands)
+        {
+            cursorPosition++;
+            if (cursorPosition > commands.Count - 1) cursorPosition = 0;           
         }
 
         public void SetFrameColor()

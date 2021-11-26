@@ -21,24 +21,22 @@ namespace ConsoleAppExample
 
         static void DisplayMenu(in List<MenuItem> commands)
         {
-            int menuPositionWidth = Console.WindowWidth / 2;
-            int menuPositionHeigth = Console.WindowHeight / 2;
-            int cursorPosition = 0;
+            //int menuPositionWidth = Console.WindowWidth / 2;
+            //int menuPositionHeigth = Console.WindowHeight / 2;
             Console.CursorVisible = false;
+            MenuTheme menuTheme = new MenuTheme();
+            Menu menu = new Menu(menuTheme, commands);
 
             while (true)
             {
-                MenuTheme menuTheme = new MenuTheme();
-                Menu menu = new Menu(menuTheme, cursorPosition, commands);
-                SwitchCommand(ref cursorPosition);
+                menu.RenderMenu(commands);
+                SwitchCommand(menu, commands);
                 //Console.SetCursorPosition(menuPositionWidth, menuPositionHeigth);
-                if (cursorPosition > commands.Count - 1) cursorPosition = 0;
-                if (cursorPosition < 0) cursorPosition = commands.Count - 1;
                 Console.Clear();
             }
         }
 
-        static void SwitchCommand(ref int positionCursor)
+        static void SwitchCommand(Menu menu, in List<MenuItem> commands)
         {
             ConsoleKeyInfo consoleKey = Console.ReadKey();
 
@@ -47,14 +45,14 @@ namespace ConsoleAppExample
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.NumPad2:
-                case ConsoleKey.NumPad6:                  
-                    positionCursor++;
+                case ConsoleKey.NumPad6:
+                    menu.NavigateDown(commands);
                     break;
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad4:
-                    positionCursor--;
+                    menu.NavigateUp(commands);
                     break;
             }
         }

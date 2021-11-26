@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppExample
 {
-    class MenuItem
+    public class MenuItem
     {
         public Action Operation { get; set; }   
 
