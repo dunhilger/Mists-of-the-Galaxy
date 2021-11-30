@@ -31,7 +31,7 @@ namespace ConsoleAppExample
             {
                 menu.RenderMenu(commands);
                 SwitchCommand(menu, commands);
-                //Console.SetCursorPosition(menuPositionWidth, menuPositionHeigth);
+
                 Console.Clear();
             }
         }
