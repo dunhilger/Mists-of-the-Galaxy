@@ -29,9 +29,8 @@ namespace ConsoleAppExample
 
             while (true)
             {
-                menu.RenderMenu(commands);
+                menu.RenderMenu();
                 SwitchCommand(menu, commands);
-
                 Console.Clear();
             }
         }

@@ -16,6 +16,14 @@ namespace ConsoleAppExample
             set { _theme = value; }
         }
 
+        private List<MenuItem> menuItems;
+
+        public List<MenuItem> MenuItems
+        {
+            get { return menuItems; }
+            set { menuItems = value; }
+        }
+    
         private int _menuWidth;
 
         public int MenuWidth
@@ -24,11 +32,12 @@ namespace ConsoleAppExample
             set { _menuWidth = value; }
         }
 
-        public int cursorPosition = 0;
+        private int cursorPosition = 0;
 
         public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
         {
             Theme = menuTheme;
+            MenuItems = menuCommands;
             MenuWidth = CalculateMenuWidth(menuCommands);          
         }
         
@@ -47,15 +56,15 @@ namespace ConsoleAppExample
             return menuWidth + indent;
         }
 
-        public void RenderMenu(in List<MenuItem> commands)
+        public void RenderMenu()
         {
             String line = new(Theme.HorisontalLineElement, MenuWidth);
             SetFrameColor();
             Console.WriteLine($"{Theme.LeftUpperCorner}{line}{Theme.RightUpperCorner}");
 
-            for (int i = 0; i < commands.Count; i++)
+            for (int i = 0; i < MenuItems.Count; i++)
             {
-                int diff = line.Length - commands[i].Name.Length;
+                int diff = line.Length - MenuItems[i].Name.Length;
                 String leftShift = new(' ', diff / 2);
                 String rightShift = new(' ', diff - leftShift.Length);
 
@@ -72,12 +81,12 @@ namespace ConsoleAppExample
                     SetNormalMenuItem();
                 }
                 
-                Console.Write($"{leftShift}{commands[i].Name}{rightShift}");
+                Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
                 ResetColorMenuItem();
                 SetFrameColor();
                 Console.WriteLine($"{Theme.VerticalLineElement}");
 
-                if (i < commands.Count - 1)
+                if (i < MenuItems.Count - 1)
                 {
                     Console.WriteLine($"{Theme.LeftInnerCorner}{line}{Theme.RightInnerCorner}");
                 }
