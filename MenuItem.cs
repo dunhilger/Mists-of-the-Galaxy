@@ -18,17 +18,12 @@ namespace ConsoleAppExample
             set { _name = value; }  
         }
 
-        private bool _isEnabled;
+        public bool IsEnabled { get; set; } 
 
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-            set { _isEnabled = value; } 
-        }
-
-        public MenuItem(string name)
+        public MenuItem(string name, bool ActivStatus)
         {
             Name = name;
-        }
+            IsEnabled = ActivStatus;
+        }     
     }
 }

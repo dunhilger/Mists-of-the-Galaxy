@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleAppExample
 {
@@ -32,106 +29,190 @@ namespace ConsoleAppExample
             set { _menuWidth = value; }
         }
 
-        private int cursorPosition = 0;
+        private int? cursorPosition = 0;
 
         public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
         {
             Theme = menuTheme;
             MenuItems = menuCommands;
-            MenuWidth = CalculateMenuWidth(menuCommands);          
+            if (MenuItems.Count > 0)
+            {
+                CalculateMenuWidth();
+                CheckActiveStatusMenuItem();
+            }         
         }
         
-        public int CalculateMenuWidth(List<MenuItem> commandsMenu)
+        public void CalculateMenuWidth()
         {
-            int menuWidth = 0;
-            int indent = 6;
+            //int menuWidth = 0;
+            const int INDENT = 6;
 
-            for (int i = 0; i < commandsMenu.Count; i++)
+            for (int i = 0; i < MenuItems.Count; i++)
             {
-                if (menuWidth < commandsMenu[i].Name.Length)
+                if (MenuWidth < MenuItems[i].Name.Length)
                 {
-                    menuWidth = commandsMenu[i].Name.Length;
+                    MenuWidth = MenuItems[i].Name.Length;
                 }
             }
-            return menuWidth + indent;
+            MenuWidth += INDENT;
         }
 
         public void RenderMenu()
         {
-            String line = new(Theme.HorisontalLineElement, MenuWidth);
-            SetFrameColor();
-            Console.WriteLine($"{Theme.LeftUpperCorner}{line}{Theme.RightUpperCorner}");
-
-            for (int i = 0; i < MenuItems.Count; i++)
+            if (MenuItems.Count > 0)
             {
-                int diff = line.Length - MenuItems[i].Name.Length;
-                String leftShift = new(' ', diff / 2);
-                String rightShift = new(' ', diff - leftShift.Length);
+                String line = new(Theme.HorisontalLineElement, MenuWidth);
+                SetFrameColor();
+                Console.WriteLine($"{Theme.LeftUpperCorner}{line}{Theme.RightUpperCorner}");
 
-                Console.Write($"{Theme.VerticalLineElement}");
-
-                if (cursorPosition == i)
+                for (int i = 0; i < MenuItems.Count; i++)
                 {
-                    SetAccentuationMenuItem();
-                    SetAccentuationBackgroundColor();
+                    int diff = line.Length - MenuItems[i].Name.Length;
+                    String leftShift = new(' ', diff / 2);
+                    String rightShift = new(' ', diff - leftShift.Length);
+
+                    Console.Write($"{Theme.VerticalLineElement}");
+
+                    if (cursorPosition == i)
+                    {
+                        SetAccentuationMenuItem();
+                        SetAccentuationBackgroundColor();
+                    }
+                    else
+                    {
+                        SetNormalBackgroundColor();
+                        SetNormalMenuItem();
+                    }
+
+                    Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
+                    ResetColorMenuItem();
+                    SetFrameColor();
+                    Console.WriteLine($"{Theme.VerticalLineElement}");
+
+                    if (i < MenuItems.Count - 1)
+                    {
+                        Console.WriteLine($"{Theme.LeftInnerCorner}{line}{Theme.RightInnerCorner}");
+                    }
+                }
+                Console.WriteLine($"{Theme.LeftBottomCorner}{line}{Theme.RightBottomCorner}");
+            }
+            else
+            {
+                Console.WriteLine("no menu");
+            }          
+        }
+
+        public void NavigateUp()
+        {
+            if (cursorPosition == null) return;
+
+            int i = (int)cursorPosition - 1;
+
+            if (i < 0) i = MenuItems.Count - 1; //repeat
+
+            while (i < MenuItems.Count)
+            {
+                if (MenuItems[i].IsEnabled == false)
+                {
+                    i--;
+                    if (i < 0) i = MenuItems.Count - 1; //repeat
                 }
                 else
                 {
-                    SetNormalBackgroundColor();
-                    SetNormalMenuItem();
-                }
-                
-                Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
-                ResetColorMenuItem();
-                SetFrameColor();
-                Console.WriteLine($"{Theme.VerticalLineElement}");
-
-                if (i < MenuItems.Count - 1)
-                {
-                    Console.WriteLine($"{Theme.LeftInnerCorner}{line}{Theme.RightInnerCorner}");
+                    cursorPosition = i;
+                    break;
                 }
             }
-            Console.WriteLine($"{Theme.LeftBottomCorner}{line}{Theme.RightBottomCorner}");
         }
 
-        public void NavigateUp(in List<MenuItem> commands)
+        public void NavigateDown()
         {
-            cursorPosition--;
-            if (cursorPosition < 0) cursorPosition = commands.Count - 1;         
+            if (cursorPosition == null) return;
+
+            int i = (int)cursorPosition + 1;
+
+            if (i > MenuItems.Count - 1) i = 0; //repeat
+
+            while (i < MenuItems.Count)
+            {
+                if (MenuItems[i].IsEnabled == false)
+                {
+                    i++;
+                    if (i > MenuItems.Count - 1) i = 0; //repeat
+                }
+                else
+                {
+                    cursorPosition = i;
+                    break;
+                }               
+            }
         }
 
-        public void NavigateDown(in List<MenuItem> commands)
+        //public void CheckActiveStatusMenuItem()
+        //{
+        //    int i = (int)cursorPosition;
+
+        //    if (MenuItems.Count > 0)
+        //    {
+        //        while (i <= MenuItems.Count - 1)
+        //        {
+        //            if (MenuItems[i].IsEnabled == false)
+        //            {
+        //                i++;
+        //            }
+        //            else
+        //            {
+        //                break;
+        //            }
+        //            if (i > MenuItems.Count - 1) i = 0;
+        //        }
+        //        cursorPosition = i;
+        //    }
+        //}
+
+        public void CheckActiveStatusMenuItem()
         {
-            cursorPosition++;
-            if (cursorPosition > commands.Count - 1) cursorPosition = 0;           
+            for (int i = (int)cursorPosition; i < MenuItems.Count; )
+            {
+                if (MenuItems[i].IsEnabled == false)
+                {
+                    i++;
+                }
+                else
+                {
+                    break;
+                }
+                cursorPosition = i;              
+            }
+            if (cursorPosition > MenuItems.Count - 1) cursorPosition = null;
         }
 
-        public void SetFrameColor()
+        private void SetFrameColor()
         {
             Console.ForegroundColor = Theme.FrameColor;
         }
 
-        public void SetAccentuationMenuItem()
+        private void SetAccentuationMenuItem()
         {         
             Console.ForegroundColor = Theme.AccentFontColor;
         }
 
-        public void SetAccentuationBackgroundColor()
+        private void SetAccentuationBackgroundColor()
         {
             Console.BackgroundColor = Theme.AccentBackGroundColor;
         }
         
-        public void SetNormalMenuItem()
+        private void SetNormalMenuItem()
         {         
             Console.ForegroundColor = Theme.NormalFontColor;
         }
 
-        public void SetNormalBackgroundColor()
+        private void SetNormalBackgroundColor()
         {
             Console.BackgroundColor = Theme.NormalBackGroundColor;
         }
 
-        public void ResetColorMenuItem()
+        private void ResetColorMenuItem()
         {
             Console.ResetColor();
         }

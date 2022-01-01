@@ -9,11 +9,11 @@ namespace ConsoleAppExample
         {
             List<MenuItem> menuItems = new List<MenuItem>
             {
-                new MenuItem("First Command"),
-                new MenuItem("Second Command"),
-                new MenuItem("Third Command"),
-                new MenuItem("Next Command"),
-                new MenuItem("Last Command"),
+                new MenuItem("First Command", false),
+                new MenuItem("Second Command", true),
+                new MenuItem("Third Command", true),
+                new MenuItem("Next Command", false),
+                //new MenuItem("Last Command", true),
             };
 
             DisplayMenu(in menuItems);
@@ -30,12 +30,12 @@ namespace ConsoleAppExample
             while (true)
             {
                 menu.RenderMenu();
-                SwitchCommand(menu, commands);
+                SwitchCommand(menu);
                 Console.Clear();
             }
         }
 
-        static void SwitchCommand(Menu menu, in List<MenuItem> commands)
+        static void SwitchCommand(Menu menu)
         {
             ConsoleKeyInfo consoleKey = Console.ReadKey();
 
@@ -45,13 +45,13 @@ namespace ConsoleAppExample
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.NumPad6:
-                    menu.NavigateDown(commands);
+                    menu.NavigateDown();
                     break;
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad4:
-                    menu.NavigateUp(commands);
+                    menu.NavigateUp();
                     break;
             }
         }
