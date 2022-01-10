@@ -39,7 +39,7 @@ namespace ConsoleAppExample
             SetCursorPosition();
         }
 
-        public void CalculateMenuWidth()
+        private void CalculateMenuWidth()
         {
             for (int i = 0; i < MenuItems.Count; i++)
             {
@@ -101,7 +101,7 @@ namespace ConsoleAppExample
             }
         }
 
-        public void Navigate(Func<int, int> getIndex)
+        private void Navigate(Func<int, int> getIndex)
         {
             if (cursorPosition == null || MenuItems.Count == 0) return;
 
@@ -140,7 +140,7 @@ namespace ConsoleAppExample
             });
         }
 
-        public void SetCursorPosition()
+        private void SetCursorPosition()
         {
             for (int i = 0; i < MenuItems.Count; i++)
             {
