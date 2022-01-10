@@ -17,5 +17,8 @@ namespace ConsoleAppExample
         public ConsoleColor AccentFontColor { get; set; } = ConsoleColor.Black;
         public ConsoleColor NormalBackGroundColor { get; set; } = ConsoleColor.Black;
         public ConsoleColor AccentBackGroundColor { get; set; } = ConsoleColor.White;
+        public ConsoleColor DisabledMenuItemColor { get; set; } = ConsoleColor.DarkGray;
+        public ConsoleColor DisableMenuItemBackGroundColor { get; set; } = ConsoleColor.Black;  
+        public int Indent { get; set; } = 6;
     }
 }

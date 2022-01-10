@@ -20,7 +20,7 @@ namespace ConsoleAppExample
             get { return menuItems; }
             set { menuItems = value; }
         }
-    
+
         private int _menuWidth;
 
         public int MenuWidth
@@ -29,24 +29,18 @@ namespace ConsoleAppExample
             set { _menuWidth = value; }
         }
 
-        private int? cursorPosition = 0;
+        private int? cursorPosition = null;
 
         public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
         {
             Theme = menuTheme;
             MenuItems = menuCommands;
-            if (MenuItems.Count > 0)
-            {
-                CalculateMenuWidth();
-                CheckActiveStatusMenuItem();
-            }         
+            CalculateMenuWidth();
+            SetCursorPosition();
         }
-        
+
         public void CalculateMenuWidth()
         {
-            //int menuWidth = 0;
-            const int INDENT = 6;
-
             for (int i = 0; i < MenuItems.Count; i++)
             {
                 if (MenuWidth < MenuItems[i].Name.Length)
@@ -54,7 +48,7 @@ namespace ConsoleAppExample
                     MenuWidth = MenuItems[i].Name.Length;
                 }
             }
-            MenuWidth += INDENT;
+            MenuWidth += Theme.Indent;
         }
 
         public void RenderMenu()
@@ -75,13 +69,18 @@ namespace ConsoleAppExample
 
                     if (cursorPosition == i)
                     {
-                        SetAccentuationMenuItem();
+                        SetAccentuationMenuItemColor();
                         SetAccentuationBackgroundColor();
+                    }
+                    else if (!MenuItems[i].IsEnabled)
+                    {
+                        SetDisabledMenuItemColor();
+                        SetDisabledMenuItemBackGroundColor();                     
                     }
                     else
                     {
                         SetNormalBackgroundColor();
-                        SetNormalMenuItem();
+                        SetNormalMenuItemColor();
                     }
 
                     Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
@@ -99,122 +98,74 @@ namespace ConsoleAppExample
             else
             {
                 Console.WriteLine("no menu");
-            }          
+            }
+        }
+
+        public void Navigate(Func<int, int> getIndex)
+        {
+            if (cursorPosition == null || MenuItems.Count == 0) return;
+
+            int i = cursorPosition.Value;
+
+            while (true)
+            {
+                i = getIndex(i);
+
+                if (i == cursorPosition.Value || MenuItems[i].IsEnabled) break;
+            }
+            cursorPosition = i;
         }
 
         public void NavigateUp()
         {
-            if (cursorPosition == null) return;
-
-            int i = (int)cursorPosition - 1;
-
-            if (i < 0) i = MenuItems.Count - 1; //repeat
-
-            while (i < MenuItems.Count)
+            Navigate(index => 
             {
-                if (MenuItems[i].IsEnabled == false)
-                {
-                    i--;
-                    if (i < 0) i = MenuItems.Count - 1; //repeat
-                }
-                else
-                {
-                    cursorPosition = i;
-                    break;
-                }
-            }
+                index--;
+
+                if (index < 0) index = MenuItems.Count - 1;
+
+                return index;
+            });
         }
 
         public void NavigateDown()
         {
-            if (cursorPosition == null) return;
-
-            int i = (int)cursorPosition + 1;
-
-            if (i > MenuItems.Count - 1) i = 0; //repeat
-
-            while (i < MenuItems.Count)
+            Navigate(index =>
             {
-                if (MenuItems[i].IsEnabled == false)
-                {
-                    i++;
-                    if (i > MenuItems.Count - 1) i = 0; //repeat
-                }
-                else
+                index++;
+
+                if (index > MenuItems.Count - 1) index = 0;
+
+                return index;
+            });
+        }
+
+        public void SetCursorPosition()
+        {
+            for (int i = 0; i < MenuItems.Count; i++)
+            {
+                if (MenuItems[i].IsEnabled)
                 {
                     cursorPosition = i;
                     break;
-                }               
-            }
-        }
-
-        //public void CheckActiveStatusMenuItem()
-        //{
-        //    int i = (int)cursorPosition;
-
-        //    if (MenuItems.Count > 0)
-        //    {
-        //        while (i <= MenuItems.Count - 1)
-        //        {
-        //            if (MenuItems[i].IsEnabled == false)
-        //            {
-        //                i++;
-        //            }
-        //            else
-        //            {
-        //                break;
-        //            }
-        //            if (i > MenuItems.Count - 1) i = 0;
-        //        }
-        //        cursorPosition = i;
-        //    }
-        //}
-
-        public void CheckActiveStatusMenuItem()
-        {
-            for (int i = (int)cursorPosition; i < MenuItems.Count; )
-            {
-                if (MenuItems[i].IsEnabled == false)
-                {
-                    i++;
                 }
-                else
-                {
-                    break;
-                }
-                cursorPosition = i;              
-            }
-            if (cursorPosition > MenuItems.Count - 1) cursorPosition = null;
+            }                
         }
 
-        private void SetFrameColor()
-        {
-            Console.ForegroundColor = Theme.FrameColor;
-        }
+        private void SetDisabledMenuItemBackGroundColor() => Console.BackgroundColor = Theme.DisableMenuItemBackGroundColor; 
 
-        private void SetAccentuationMenuItem()
-        {         
-            Console.ForegroundColor = Theme.AccentFontColor;
-        }
+        private void SetDisabledMenuItemColor() => Console.ForegroundColor = Theme.DisabledMenuItemColor;
 
-        private void SetAccentuationBackgroundColor()
-        {
-            Console.BackgroundColor = Theme.AccentBackGroundColor;
-        }
+        private void SetFrameColor() => Console.ForegroundColor = Theme.FrameColor;       
+
+        private void SetAccentuationMenuItemColor() => Console.ForegroundColor = Theme.AccentFontColor;    
+
+        private void SetAccentuationBackgroundColor() => Console.BackgroundColor = Theme.AccentBackGroundColor;
         
-        private void SetNormalMenuItem()
-        {         
-            Console.ForegroundColor = Theme.NormalFontColor;
-        }
-
-        private void SetNormalBackgroundColor()
-        {
-            Console.BackgroundColor = Theme.NormalBackGroundColor;
-        }
-
-        private void ResetColorMenuItem()
-        {
-            Console.ResetColor();
-        }
+        private void SetNormalMenuItemColor() => Console.ForegroundColor = Theme.NormalFontColor;
+        
+        private void SetNormalBackgroundColor() => Console.BackgroundColor = Theme.NormalBackGroundColor;
+        
+        private void ResetColorMenuItem() => Console.ResetColor();       
     }
 }
