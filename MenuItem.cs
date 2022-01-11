@@ -9,16 +9,8 @@ namespace ConsoleAppExample
     public class MenuItem
     {
         public Action Operation { get; set; }   
-
-        private string _name;
-
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }  
-        }
-
-        public bool IsEnabled { get; set; } 
+        public string Name { get; }
+        public bool IsEnabled { get; } 
 
         public MenuItem(string name, bool ActivStatus)
         {

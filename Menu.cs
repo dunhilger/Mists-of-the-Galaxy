@@ -5,29 +5,11 @@ namespace ConsoleAppExample
 {
     public class Menu
     {
-        private MenuTheme _theme;
+        public MenuTheme Theme { get; }
 
-        public MenuTheme Theme
-        {
-            get { return _theme; }
-            set { _theme = value; }
-        }
+        public List<MenuItem> MenuItems { get; }
 
-        private List<MenuItem> menuItems;
-
-        public List<MenuItem> MenuItems
-        {
-            get { return menuItems; }
-            set { menuItems = value; }
-        }
-
-        private int _menuWidth;
-
-        public int MenuWidth
-        {
-            get { return _menuWidth; }
-            set { _menuWidth = value; }
-        }
+        public int MenuWidth { get; }
 
         private int? cursorPosition = null;
 
@@ -35,20 +17,22 @@ namespace ConsoleAppExample
         {
             Theme = menuTheme;
             MenuItems = menuCommands;
-            CalculateMenuWidth();
+            MenuWidth = CalculateMenuWidth();
             SetCursorPosition();
         }
 
-        private void CalculateMenuWidth()
+        private int CalculateMenuWidth()
         {
+            int getMenuWidth = 0;
+
             for (int i = 0; i < MenuItems.Count; i++)
             {
-                if (MenuWidth < MenuItems[i].Name.Length)
+                if (getMenuWidth < MenuItems[i].Name.Length)
                 {
-                    MenuWidth = MenuItems[i].Name.Length;
+                    getMenuWidth = MenuItems[i].Name.Length;
                 }
             }
-            MenuWidth += Theme.Indent;
+            return getMenuWidth += Theme.Indent;
         }
 
         public void RenderMenu()
