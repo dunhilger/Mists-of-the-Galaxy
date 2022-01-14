@@ -51,20 +51,28 @@ namespace ConsoleAppExample
 
                     Console.Write($"{Theme.VerticalLineElement}");
 
+                    if (Theme.DisabledItemSelectionType == MenuTheme.ItemSelectionType.Skip)
+                    {
+                        if (!MenuItems[i].IsEnabled)
+                        {
+                            SetDisabledMenuItemColor();
+                            SetDisabledMenuItemBackGroundColor();
+                        }                       
+                    }
+
+                    if(Theme.DisabledItemSelectionType == MenuTheme.ItemSelectionType.Select)
+                    {
+                        if (!MenuItems[i].IsEnabled)
+                        {
+                            SetNormalBackgroundColor();
+                            SetNormalMenuItemColor();
+                        }                                                
+                    }
+
                     if (cursorPosition == i)
                     {
                         SetAccentuationMenuItemColor();
                         SetAccentuationBackgroundColor();
-                    }
-                    else if (!MenuItems[i].IsEnabled)
-                    {
-                        SetDisabledMenuItemColor();
-                        SetDisabledMenuItemBackGroundColor();                     
-                    }
-                    else
-                    {
-                        SetNormalBackgroundColor();
-                        SetNormalMenuItemColor();
                     }
 
                     Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
@@ -95,7 +103,11 @@ namespace ConsoleAppExample
             {
                 i = getIndex(i);
 
-                if (i == cursorPosition.Value || MenuItems[i].IsEnabled) break;
+                if (Theme.DisabledItemSelectionType == MenuTheme.ItemSelectionType.Skip)
+                {
+                    if (i == cursorPosition.Value || MenuItems[i].IsEnabled) break;
+                }
+                else break;
             }
             cursorPosition = i;
         }
@@ -128,12 +140,20 @@ namespace ConsoleAppExample
         {
             for (int i = 0; i < MenuItems.Count; i++)
             {
-                if (MenuItems[i].IsEnabled)
+                if (Theme.DisabledItemSelectionType == MenuTheme.ItemSelectionType.Skip)
+                {
+                    if (MenuItems[i].IsEnabled)
+                    {
+                        cursorPosition = i;
+                        break;
+                    }
+                }
+                else
                 {
                     cursorPosition = i;
                     break;
                 }
-            }                
+            }
         }
 
         private void SetDisabledMenuItemBackGroundColor() => Console.BackgroundColor = Theme.DisableMenuItemBackGroundColor; 

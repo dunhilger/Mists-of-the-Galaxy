@@ -8,7 +8,6 @@ namespace ConsoleAppExample
 {
     public class MenuItem
     {
-        public Action Operation { get; set; }   
         public string Name { get; }
         public bool IsEnabled { get; } 
 

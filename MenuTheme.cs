@@ -4,6 +4,12 @@ namespace ConsoleAppExample
 {
     public class MenuTheme
     {
+        public enum ItemSelectionType
+        {
+            Skip = 0,
+            Select
+        }
+        public ItemSelectionType DisabledItemSelectionType { get; set; }
         public char HorisontalLineElement { get; } = '═';
         public char VerticalLineElement { get; } = '║';
         public char LeftBottomCorner { get; } = '╚';
@@ -20,5 +26,15 @@ namespace ConsoleAppExample
         public ConsoleColor DisabledMenuItemColor { get; set; } = ConsoleColor.DarkGray;
         public ConsoleColor DisableMenuItemBackGroundColor { get; set; } = ConsoleColor.Black;  
         public int Indent { get; } = 6;
+
+        public void SetSelectType()
+        {
+            DisabledItemSelectionType = ItemSelectionType.Select;
+        }  
+        
+        public void SetSkipType()
+        {
+            DisabledItemSelectionType = ItemSelectionType.Skip;
+        }
     }
 }
