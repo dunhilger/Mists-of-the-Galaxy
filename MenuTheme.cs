@@ -2,14 +2,22 @@
 
 namespace ConsoleAppExample
 {
+    public enum ItemSelectionMode : byte
+    {
+        Skip = 0,
+        Select = 1
+    }
+
+    public enum NavigationType : byte
+    {
+        LoopOff = 0,
+        LoopOn = 1
+    }
+
     public class MenuTheme
     {
-        public enum ItemSelectionType
-        {
-            Skip = 0,
-            Select
-        }
-        public ItemSelectionType DisabledItemSelectionType { get; set; }
+        public NavigationType SelectedNavigationType { get; set; } = NavigationType.LoopOn;  
+        public ItemSelectionMode DisabledItemSelectionMode { get; set; } = ItemSelectionMode.Select;
         public char HorisontalLineElement { get; } = '═';
         public char VerticalLineElement { get; } = '║';
         public char LeftBottomCorner { get; } = '╚';
@@ -19,22 +27,14 @@ namespace ConsoleAppExample
         public char LeftInnerCorner { get; } = '╠';
         public char RightInnerCorner { get; } = '╣';
         public ConsoleColor FrameColor { get; set; } = ConsoleColor.White;
-        public ConsoleColor NormalFontColor { get; set; } = ConsoleColor.White;
-        public ConsoleColor AccentFontColor { get; set; } = ConsoleColor.Black;
-        public ConsoleColor NormalBackGroundColor { get; set; } = ConsoleColor.Black;
-        public ConsoleColor AccentBackGroundColor { get; set; } = ConsoleColor.White;
-        public ConsoleColor DisabledMenuItemColor { get; set; } = ConsoleColor.DarkGray;
-        public ConsoleColor DisableMenuItemBackGroundColor { get; set; } = ConsoleColor.Black;  
+        public ConsoleColor TextColor { get; set; } = ConsoleColor.White; 
+        public ConsoleColor BackgroundColor { get; set; } = ConsoleColor.Black;
+        public ConsoleColor SelectedTextColor { get; set; } = ConsoleColor.Black;
+        public ConsoleColor SelectedBackgroundColor { get; set; } = ConsoleColor.White; 
+        public ConsoleColor DisabledTextColor { get; set; } = ConsoleColor.DarkGray; 
+        public ConsoleColor DisabledBackgroundColor { get; set; } = ConsoleColor.Black; 
+        public ConsoleColor SelectedDisabledTextColor { get; set; } = ConsoleColor.DarkGray;
+        public ConsoleColor SelectedDisabledBackgroundColor { get; set; } = ConsoleColor.Black;
         public int Indent { get; } = 6;
-
-        public void SetSelectType()
-        {
-            DisabledItemSelectionType = ItemSelectionType.Select;
-        }  
-        
-        public void SetSkipType()
-        {
-            DisabledItemSelectionType = ItemSelectionType.Skip;
-        }
     }
 }

@@ -25,7 +25,6 @@ namespace ConsoleAppExample
             //int menuPositionHeigth = Console.WindowHeight / 2;
             Console.CursorVisible = false;
             MenuTheme menuTheme = new MenuTheme();
-            menuTheme.SetSelectType();
             Menu menu = new Menu(menuTheme, commands);
 
             while (true)
