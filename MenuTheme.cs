@@ -16,8 +16,8 @@ namespace ConsoleAppExample
 
     public class MenuTheme
     {
-        public NavigationType SelectedNavigationType { get; set; } = NavigationType.LoopOn;  
-        public ItemSelectionMode DisabledItemSelectionMode { get; set; } = ItemSelectionMode.Select;
+        public NavigationType SelectedNavigationType { get; set; } = NavigationType.LoopOff;  
+        public ItemSelectionMode DisabledItemSelectionMode { get; set; } = ItemSelectionMode.Skip;
         public char HorisontalLineElement { get; } = '═';
         public char VerticalLineElement { get; } = '║';
         public char LeftBottomCorner { get; } = '╚';

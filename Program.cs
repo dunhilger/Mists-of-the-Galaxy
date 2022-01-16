@@ -13,7 +13,7 @@ namespace ConsoleAppExample
                 new MenuItem("Second Command", true),
                 new MenuItem("Third Command", true),
                 new MenuItem("Next Command", false),
-                new MenuItem("Last Command", false),
+                new MenuItem("Last Command", true),
             };
 
             DisplayMenu(in menuItems);

@@ -126,13 +126,13 @@ namespace ConsoleAppExample
                     switch (Theme.SelectedNavigationType)
                     {
                         case NavigationType.LoopOff:
-                            index = 0;
+                            index = (int)cursorPosition;
                             break;
                         case NavigationType.LoopOn:
                             index = MenuItems.Count - 1;
                             break;
                     }
-                } 
+                }
                 return index;
             });
         }
@@ -148,7 +148,7 @@ namespace ConsoleAppExample
                     switch (Theme.SelectedNavigationType)
                     {
                         case NavigationType.LoopOff:
-                            index = MenuItems.Count - 1;
+                            index = (int)cursorPosition;
                             break;
                         case NavigationType.LoopOn:
                             index = 0;
