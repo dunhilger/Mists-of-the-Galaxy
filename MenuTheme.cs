@@ -16,7 +16,7 @@ namespace ConsoleAppExample
 
     public class MenuTheme
     {
-        public NavigationType SelectedNavigationType { get; set; } = NavigationType.LoopOff;  
+        public NavigationType NavigationType { get; set; } = NavigationType.LoopOff;  
         public ItemSelectionMode DisabledItemSelectionMode { get; set; } = ItemSelectionMode.Skip;
         public char HorisontalLineElement { get; } = '═';
         public char VerticalLineElement { get; } = '║';
@@ -34,7 +34,7 @@ namespace ConsoleAppExample
         public ConsoleColor DisabledTextColor { get; set; } = ConsoleColor.DarkGray; 
         public ConsoleColor DisabledBackgroundColor { get; set; } = ConsoleColor.Black; 
         public ConsoleColor SelectedDisabledTextColor { get; set; } = ConsoleColor.DarkGray;
-        public ConsoleColor SelectedDisabledBackgroundColor { get; set; } = ConsoleColor.Black;
+        public ConsoleColor SelectedDisabledBackgroundColor { get; set; } = ConsoleColor.Gray;
         public int Indent { get; } = 6;
     }
 }

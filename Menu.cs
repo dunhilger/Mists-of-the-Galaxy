@@ -13,6 +13,8 @@ namespace ConsoleAppExample
 
         private int? cursorPosition = null;
 
+        //свойство отслеживания selectedItem
+
         public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
         {
             Theme = menuTheme;
@@ -51,26 +53,19 @@ namespace ConsoleAppExample
 
                     Console.Write($"{Theme.VerticalLineElement}");
 
-                    if (!MenuItems[i].IsEnabled)
+                    if (MenuItems[i].IsEnabled)
                     {
-                        switch (Theme.DisabledItemSelectionMode)
-                        {
-                            case ItemSelectionMode.Skip:
-                                SetDisabledItemColors();
-                                break;
-                            case ItemSelectionMode.Select:
-                                SetSelectedDisabledItemColors();
-                                break;
-                        }
+                        if (cursorPosition == i)
+                            SetSelectedItemColors();
+                        else
+                            SetNormalItemColors();
                     }
                     else
                     {
-                        SetNormalItemColors();
-                    }                   
-
-                    if (cursorPosition == i)
-                    {
-                        SetSelectedItemColors();
+                        if (cursorPosition == i)
+                            SetSelectedDisabledItemColors();
+                        else
+                            SetDisabledItemColors();
                     }
 
                     Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
@@ -99,13 +94,21 @@ namespace ConsoleAppExample
 
             while (true)
             {
+                int previousEnabledIndex = i;
+
                 i = getIndex(i);
 
                 if (Theme.DisabledItemSelectionMode == ItemSelectionMode.Skip)
                 {
                     if (i == cursorPosition.Value || MenuItems[i].IsEnabled)
-
+                    {
                         break;
+                    }
+                    else if (i == previousEnabledIndex)
+                    {
+                        i = cursorPosition.Value;
+                        break;
+                    }                       
                 }
                 else
                 {
@@ -117,16 +120,16 @@ namespace ConsoleAppExample
 
         public void NavigateUp()
         {
-            Navigate(index => 
+            Navigate(index =>
             {
                 index--;
 
                 if (index < 0)
                 {
-                    switch (Theme.SelectedNavigationType)
+                    switch (Theme.NavigationType)
                     {
                         case NavigationType.LoopOff:
-                            index = (int)cursorPosition;
+                            index++;
                             break;
                         case NavigationType.LoopOn:
                             index = MenuItems.Count - 1;
@@ -145,10 +148,10 @@ namespace ConsoleAppExample
 
                 if (index > MenuItems.Count - 1)
                 {
-                    switch (Theme.SelectedNavigationType)
+                    switch (Theme.NavigationType)
                     {
                         case NavigationType.LoopOff:
-                            index = (int)cursorPosition;
+                            index--;
                             break;
                         case NavigationType.LoopOn:
                             index = 0;

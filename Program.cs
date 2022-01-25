@@ -9,11 +9,11 @@ namespace ConsoleAppExample
         {
             List<MenuItem> menuItems = new List<MenuItem>
             {
-                new MenuItem("First Command", false),
-                new MenuItem("Second Command", true),
+                new MenuItem("First Command", true),
+                new MenuItem("Second Command", false),
                 new MenuItem("Third Command", true),
-                new MenuItem("Next Command", false),
-                new MenuItem("Last Command", true),
+                new MenuItem("Next Command", true),
+                new MenuItem("Last Command", false),
             };
 
             DisplayMenu(in menuItems);
