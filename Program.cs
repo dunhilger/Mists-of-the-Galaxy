@@ -9,7 +9,7 @@ namespace ConsoleAppExample
         {
             List<MenuItem> menuItems = new List<MenuItem>
             {
-                new MenuItem("First Command", true),
+                new MenuItem("First Command", false),
                 new MenuItem("Second Command", false),
                 new MenuItem("Third Command", true),
                 new MenuItem("Next Command", true),
@@ -26,7 +26,7 @@ namespace ConsoleAppExample
             Console.CursorVisible = false;
             MenuTheme menuTheme = new MenuTheme();
             Menu menu = new Menu(menuTheme, commands);
-
+            
             while (true)
             {
                 menu.RenderMenu();

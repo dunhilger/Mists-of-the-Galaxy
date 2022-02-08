@@ -11,9 +11,22 @@ namespace ConsoleAppExample
 
         public int MenuWidth { get; }
 
-        private int? cursorPosition = null;
+        public MenuItem SelectedMenuItem
+        {
+            get 
+            {
+                if (cursorPosition.HasValue)
+                {
+                    return MenuItems[cursorPosition.Value];
+                }
+                else
+                {
+                    return null;
+                }               
+            }
+        }
 
-        //свойство отслеживания selectedItem
+        private int? cursorPosition = null;    
 
         public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
         {
@@ -25,16 +38,16 @@ namespace ConsoleAppExample
 
         private int CalculateMenuWidth()
         {
-            int getMenuWidth = 0;
+            int menuWidth = 0;
 
             for (int i = 0; i < MenuItems.Count; i++)
             {
-                if (getMenuWidth < MenuItems[i].Name.Length)
+                if (menuWidth < MenuItems[i].Name.Length)
                 {
-                    getMenuWidth = MenuItems[i].Name.Length;
+                    menuWidth = MenuItems[i].Name.Length;
                 }
             }
-            return getMenuWidth += Theme.Indent;
+            return menuWidth += Theme.Indent;
         }
 
         public void RenderMenu()
