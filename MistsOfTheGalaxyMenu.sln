@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MistsOfTheGalaxyMenu", "MistsOfTheGalaxyMenu\MistsOfTheGalaxyMenu.csproj", "{CD39D715-B38D-4B57-A267-0C353D619276}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuUnitTests", "MenuUnitTests\MenuUnitTests.csproj", "{559BC1DE-C7FF-46B4-BB84-852BA7506465}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD39D715-B38D-4B57-A267-0C353D619276} = {CD39D715-B38D-4B57-A267-0C353D619276}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD39D715-B38D-4B57-A267-0C353D619276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD39D715-B38D-4B57-A267-0C353D619276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD39D715-B38D-4B57-A267-0C353D619276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD39D715-B38D-4B57-A267-0C353D619276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{559BC1DE-C7FF-46B4-BB84-852BA7506465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{559BC1DE-C7FF-46B4-BB84-852BA7506465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{559BC1DE-C7FF-46B4-BB84-852BA7506465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{559BC1DE-C7FF-46B4-BB84-852BA7506465}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {352AD594-E7E0-4532-BD27-BA043B1043E2}
+	EndGlobalSection
+EndGlobal
