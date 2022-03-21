@@ -26,12 +26,13 @@ namespace MistsOfTheGalaxyMenu
             }
         }
 
-        private int? cursorPosition = null;    
+        private int? cursorPosition = null;
 
-        public Menu(MenuTheme menuTheme, List<MenuItem> menuCommands)
+        public Menu(List<MenuItem> menuItems, MenuTheme menuTheme = null)
         {
-            Theme = menuTheme;
-            MenuItems = menuCommands;
+            Theme = menuTheme ?? new MenuTheme();
+            MenuItems = menuItems ?? throw new ArgumentNullException(nameof(menuItems));
+
             MenuWidth = CalculateMenuWidth();
             SetCursorPosition();
         }
@@ -115,7 +116,7 @@ namespace MistsOfTheGalaxyMenu
 
                 i = getIndex(i);
 
-                if (Theme.DisabledItemSelectionMode == ItemSelectionMode.Skip)
+                if (Theme.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
                 {
                     if (i == cursorPosition.Value || MenuItems[i].IsEnabled)
                     {
@@ -183,7 +184,7 @@ namespace MistsOfTheGalaxyMenu
         {
             for (int i = 0; i < MenuItems.Count; i++)
             {
-                if (Theme.DisabledItemSelectionMode == ItemSelectionMode.Skip)
+                if (Theme.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
                 {
                     if (MenuItems[i].IsEnabled)
                     {

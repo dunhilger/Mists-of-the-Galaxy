@@ -7,7 +7,7 @@ namespace MistsOfTheGalaxyMenu
     {
         static void Main(string[] args)
         {
-            List<MenuItem> menuItems = new List<MenuItem>
+            var menuItems = new List<MenuItem>
             {
                 new MenuItem("First Command", false),
                 new MenuItem("Second Command", false),
@@ -24,13 +24,13 @@ namespace MistsOfTheGalaxyMenu
             //int menuPositionWidth = Console.WindowWidth / 2;
             //int menuPositionHeigth = Console.WindowHeight / 2;
             Console.CursorVisible = false;
-            MenuTheme menuTheme = new MenuTheme();
-            Menu menu = new Menu(menuTheme, commands);
+            
+            var menu = new Menu(commands);
             
             while (true)
             {
                 menu.RenderMenu();
-                SwitchCommand(menu);
+                SwitchCommand(menu);    
                 Console.Clear();
             }
         }

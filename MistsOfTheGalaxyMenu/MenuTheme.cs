@@ -2,7 +2,7 @@
 
 namespace MistsOfTheGalaxyMenu
 {
-    public enum ItemSelectionMode : byte
+    public enum DisabledItemSelectionMode : byte
     {
         Skip = 0,
         Select = 1
@@ -17,7 +17,7 @@ namespace MistsOfTheGalaxyMenu
     public class MenuTheme
     {
         public NavigationMode NavigationMode { get; set; } = NavigationMode.LoopOn;  
-        public ItemSelectionMode DisabledItemSelectionMode { get; set; } = ItemSelectionMode.Select;
+        public DisabledItemSelectionMode DisabledItemSelectionMode { get; set; } = DisabledItemSelectionMode.Select;
         public char HorisontalLineElement { get; } = '═';
         public char VerticalLineElement { get; } = '║';
         public char LeftBottomCorner { get; } = '╚';

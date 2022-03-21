@@ -8,220 +8,244 @@ namespace MenuUnitTests
     [TestFixture]
     class NavigateUpTests
     {
-        [TestCase(ItemSelectionMode.Select, NavigationMode.LoopOn)]
-        [TestCase(ItemSelectionMode.Skip, NavigationMode.LoopOn)]
-        [TestCase(ItemSelectionMode.Select, NavigationMode.LoopOff)]
-        [TestCase(ItemSelectionMode.Skip, NavigationMode.LoopOff)]
+        [TestCase(DisabledItemSelectionMode.Select, NavigationMode.LoopOn)]
+        [TestCase(DisabledItemSelectionMode.Skip, NavigationMode.LoopOn)]
+        [TestCase(DisabledItemSelectionMode.Select, NavigationMode.LoopOff)]
+        [TestCase(DisabledItemSelectionMode.Skip, NavigationMode.LoopOff)]
 
+        [Test]
         public void Check_All_Mode_EmptyMenuItemList(
-            ItemSelectionMode itemSelectionMode,
-            NavigationMode navigationType)
+            DisabledItemSelectionMode disabledItemSelectionMode,
+            NavigationMode navigationMode)
         {
-            List<MenuItem> menuItems = new List<MenuItem> { };
+            var menuItems = new List<MenuItem> { };
 
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
-                DisabledItemSelectionMode = itemSelectionMode,
-                NavigationMode = navigationType,
+                DisabledItemSelectionMode = disabledItemSelectionMode,
+                NavigationMode = navigationMode,
             };
 
-            Menu menu = new Menu(menuTheme, menuItems);
+            var menu = new Menu(menuItems, menuTheme);
 
             menu.NavigateUp();
 
             Assert.AreEqual(null, menu.SelectedMenuItem);
         }
 
-        [TestCase(ItemSelectionMode.Select, NavigationMode.LoopOn)]
-        [TestCase(ItemSelectionMode.Skip, NavigationMode.LoopOn)]
-        [TestCase(ItemSelectionMode.Select, NavigationMode.LoopOff)]
-        [TestCase(ItemSelectionMode.Skip, NavigationMode.LoopOff)]
+        [TestCase(DisabledItemSelectionMode.Select, NavigationMode.LoopOn)]
+        [TestCase(DisabledItemSelectionMode.Skip, NavigationMode.LoopOn)]
+        [TestCase(DisabledItemSelectionMode.Select, NavigationMode.LoopOff)]
+        [TestCase(DisabledItemSelectionMode.Skip, NavigationMode.LoopOff)]
 
-        public void Check_All_Mode_OneEnableMenuItem(
-            ItemSelectionMode itemSelectionMode,
-            NavigationMode navigationType)
+        [Test]
+        public void Check_All_Mode_OneEnabledMenuItem(
+            DisabledItemSelectionMode disabledItemSelectionMode,
+            NavigationMode navigationMode)
         {
-            List<MenuItem> menuItems = new List<MenuItem> { new MenuItem("a", true) };
+            var menuItems = new List<MenuItem> { new MenuItem("a", true) };
 
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
-                DisabledItemSelectionMode = itemSelectionMode,
-                NavigationMode = navigationType,
+                DisabledItemSelectionMode = disabledItemSelectionMode,
+                NavigationMode = navigationMode,
             };
 
-            Menu menu = new Menu(menuTheme, menuItems);
+            var menu = new Menu(menuItems, menuTheme);
 
             menu.NavigateUp();
 
             Assert.AreEqual(menuItems[0], menu.SelectedMenuItem);
         }
 
-        [TestCase(ItemSelectionMode.Select, NavigationMode.LoopOn)]
-        [TestCase(ItemSelectionMode.Select, NavigationMode.LoopOff)]
+        [TestCase(NavigationMode.LoopOn)]
+        [TestCase(NavigationMode.LoopOff)]
 
-        public void Check_Select_Mode_OneDisableMenuItem(
-            ItemSelectionMode itemSelectionMode, 
-            NavigationMode navigationType) 
+        [Test]
+        public void Check_Select_Mode_OneDisabledMenuItem(NavigationMode navigationMode) 
         {
-            List<MenuItem> menuItems = new List<MenuItem> { new MenuItem("a", false) };
+            var menuItems = new List<MenuItem> { new MenuItem("a", false) };
 
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
-                DisabledItemSelectionMode = itemSelectionMode,
-                NavigationMode = navigationType,
+                DisabledItemSelectionMode = DisabledItemSelectionMode.Select,
+                NavigationMode = navigationMode,
             };
 
-            Menu menu = new Menu(menuTheme, menuItems);
+            var menu = new Menu(menuItems, menuTheme);
 
             menu.NavigateUp();
 
             Assert.AreEqual(menuItems[0], menu.SelectedMenuItem);
         }
         
-        [TestCase(ItemSelectionMode.Skip, NavigationMode.LoopOn)]
-        [TestCase(ItemSelectionMode.Skip, NavigationMode.LoopOff)]
+        [TestCase(NavigationMode.LoopOn)]
+        [TestCase(NavigationMode.LoopOff)]
 
-        public void Check_Skip_Mode_OneDisableMenuItem(  
-            ItemSelectionMode itemSelectionMode, 
-            NavigationMode navigationType) 
+        [Test]
+        public void Check_Skip_Mode_OneDisabledMenuItem(NavigationMode navigationMode) 
         {
-            List<MenuItem> menuItems = new List<MenuItem> { new MenuItem("a", false) };
+            var menuItems = new List<MenuItem> { new MenuItem("a", false) };
 
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
-                DisabledItemSelectionMode = itemSelectionMode,
-                NavigationMode = navigationType,
+                DisabledItemSelectionMode = DisabledItemSelectionMode.Skip,
+                NavigationMode = navigationMode,
             };
 
-            Menu menu = new Menu(menuTheme, menuItems);
+            var menu = new Menu(menuItems, menuTheme);
 
             menu.NavigateUp();
 
             Assert.AreEqual(null, menu.SelectedMenuItem);
         }
 
-        public static IEnumerable<TestCaseData> LoopOn_Select_Mode_TestDataCase
-        {
-            get
-            {
-                MenuItem firstMenuItem = new MenuItem("a", false);
-                MenuItem secondMenuItem = new MenuItem("b", true);
-                MenuItem thirdMenuItem = new MenuItem("c", false);
-                MenuItem fourthMenuItem = new MenuItem("d", true);
-                MenuItem fifthMenuItem = new MenuItem("e", false);
+        [TestCase(new int[] { 1, 0, 1 }, 2, 1)]
+        [TestCase(new int[] { 0, 1, 1, 0 }, 5, 3)]
+        [TestCase(new int[] { 1, 1, 1, 0, 1 }, 5, 0)]
 
-                yield return new TestCaseData(new List<MenuItem> { firstMenuItem, secondMenuItem, thirdMenuItem, fourthMenuItem, fifthMenuItem }, fifthMenuItem );
-                yield return new TestCaseData(new List<MenuItem> { secondMenuItem, firstMenuItem, thirdMenuItem, fifthMenuItem, fourthMenuItem }, fourthMenuItem );
-            }
-        }
-
-        [TestCaseSource(nameof(LoopOn_Select_Mode_TestDataCase))]
-        public void Check_LoopOn_Select_Mode_MenuItemList(List<MenuItem> list, MenuItem expectedResult)
+        [Test]
+        public void Check_LoopOn_Select_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
                 NavigationMode = NavigationMode.LoopOn,
-                DisabledItemSelectionMode = ItemSelectionMode.Select,
+                DisabledItemSelectionMode = DisabledItemSelectionMode.Select,
             };
 
-            Menu menu = new Menu(menuTheme, list);
+            var menuItems = new List<MenuItem> { };
 
-            menu.NavigateUp();
-
-            Assert.AreEqual(expectedResult, menu.SelectedMenuItem);
-        }
-        
-        public static IEnumerable<TestCaseData> LoopOff_Select_Mode_TestDataCase
-        {
-            get
+            foreach (int flag in enableFlags)
             {
-                MenuItem firstMenuItem = new MenuItem("a", false);
-                MenuItem secondMenuItem = new MenuItem("b", true);
-                MenuItem thirdMenuItem = new MenuItem("c", false);
-                MenuItem fourthMenuItem = new MenuItem("d", true);
-                MenuItem fifthMenuItem = new MenuItem("e", false);
-
-                yield return new TestCaseData(new List<MenuItem> { firstMenuItem, secondMenuItem, thirdMenuItem, fourthMenuItem, fifthMenuItem }, firstMenuItem );
-                yield return new TestCaseData(new List<MenuItem> { secondMenuItem, firstMenuItem, thirdMenuItem, fifthMenuItem, fourthMenuItem }, secondMenuItem );
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
             }
+
+            var menu = new Menu(menuItems, menuTheme);
+
+            for (int i = 0; i < moveCounter; i++)
+            {
+                menu.NavigateUp();
+            }
+
+            MenuItem expectedMenuItem = null;
+
+            if (selectedIndex.HasValue)
+            {
+                expectedMenuItem = menuItems[selectedIndex.Value];
+            }
+
+            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
         }
 
-        [TestCaseSource(nameof(LoopOff_Select_Mode_TestDataCase))]
-        public void Check_LoopOff_Select_Mode_MenuItemList(List<MenuItem> list, MenuItem expectedResult)
+        [TestCase(new int[] { 1, 0, 1 }, 2, 0)]
+        [TestCase(new int[] { 0, 1, 1 }, 2, 0)]
+        [TestCase(new int[] { 0, 0, 1 }, 2, 0)]
+
+        [Test]
+        public void Check_LoopOff_Select_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
                 NavigationMode = NavigationMode.LoopOff,
-                DisabledItemSelectionMode = ItemSelectionMode.Select,
+                DisabledItemSelectionMode = DisabledItemSelectionMode.Select,
             };
 
-            Menu menu = new Menu(menuTheme, list);
+            var menuItems = new List<MenuItem> { };
 
-            menu.NavigateUp();
+            foreach (int flag in enableFlags)
+            {
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+            }
 
-            Assert.AreEqual(expectedResult, menu.SelectedMenuItem);
+            var menu = new Menu(menuItems, menuTheme);
+
+            for (int i = 0; i < moveCounter; i++)
+            {
+                menu.NavigateUp();
+            }
+
+            MenuItem expectedMenuItem = null;
+
+            if (selectedIndex.HasValue)
+            {
+                expectedMenuItem = menuItems[selectedIndex.Value];
+            }
+
+            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
         }
         
-        public static IEnumerable<TestCaseData> LoopOn_Skip_Mode_TestDataCase
-        {
-            get
-            {
-                MenuItem firstMenuItem = new MenuItem("a", false);
-                MenuItem secondMenuItem = new MenuItem("b", true);
-                MenuItem thirdMenuItem = new MenuItem("c", false);
-                MenuItem fourthMenuItem = new MenuItem("d", true);
-                MenuItem fifthMenuItem = new MenuItem("e", false);
+        [TestCase(new int[] { 0, 1, 0}, 2, 1)]
+        [TestCase(new int[] { 0, 1, 1, 0}, 3, 2)]
+        [TestCase(new int[] { 1, 0, 0, 1}, 3, 3)]
 
-                yield return new TestCaseData(new List<MenuItem> { firstMenuItem, secondMenuItem, thirdMenuItem, fourthMenuItem, fifthMenuItem }, fourthMenuItem);
-                yield return new TestCaseData(new List<MenuItem> { firstMenuItem, secondMenuItem, fourthMenuItem, thirdMenuItem, fifthMenuItem }, fourthMenuItem);
-            }
-        }
-
-        [TestCaseSource(nameof(LoopOn_Skip_Mode_TestDataCase))]
-        public void Check_LoopOn_Skip_Mode_MenuItemList(List<MenuItem> list, MenuItem expectedResult)
+        [Test]
+        public void Check_LoopOn_Skip_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
                 NavigationMode = NavigationMode.LoopOn,
-                DisabledItemSelectionMode = ItemSelectionMode.Skip,
+                DisabledItemSelectionMode = DisabledItemSelectionMode.Skip,
             };
 
-            Menu menu = new Menu(menuTheme, list);
+            var menuItems = new List<MenuItem> { };
 
-            menu.NavigateUp();
+            foreach (int flag in enableFlags)
+            {
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+            }
 
-            Assert.AreEqual(expectedResult, menu.SelectedMenuItem);
+            var menu = new Menu(menuItems, menuTheme);
+
+            for (int i = 0; i < moveCounter; i++)
+            {
+                menu.NavigateUp();
+            }
+
+            MenuItem expectedMenuItem = null;
+
+            if (selectedIndex.HasValue)
+            {
+                expectedMenuItem = menuItems[selectedIndex.Value];
+            }
+
+            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
         }
         
-        public static IEnumerable<TestCaseData> LoopOff_Skip_Mode_TestDataCase
-        {
-            get
-            {
-                MenuItem firstMenuItem = new MenuItem("a", false);
-                MenuItem secondMenuItem = new MenuItem("b", true);
-                MenuItem thirdMenuItem = new MenuItem("c", false);
-                MenuItem fourthMenuItem = new MenuItem("d", true);
-                MenuItem fifthMenuItem = new MenuItem("e", false);
+        [TestCase(new int[] { 0, 1, 0}, 2, 1)]
+        [TestCase(new int[] { 1, 1, 0}, 2, 0)]
+        [TestCase(new int[] { 0, 0, 1, 0 }, 2, 2)]
 
-                yield return new TestCaseData(new List<MenuItem> { firstMenuItem, secondMenuItem, thirdMenuItem, fourthMenuItem, fifthMenuItem }, secondMenuItem);
-                yield return new TestCaseData(new List<MenuItem> { secondMenuItem, firstMenuItem, fourthMenuItem, thirdMenuItem, fifthMenuItem }, secondMenuItem);
-            }
-        }
-
-        [TestCaseSource(nameof(LoopOff_Skip_Mode_TestDataCase))]
-        public void Check_LoopOff_Skip_Mode_MenuItemList(List<MenuItem> list, MenuItem expectedResult)
+        [Test]
+        public void Check_LoopOff_Skip_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            MenuTheme menuTheme = new MenuTheme()
+            var menuTheme = new MenuTheme()
             {
                 NavigationMode = NavigationMode.LoopOff,
-                DisabledItemSelectionMode = ItemSelectionMode.Skip,
+                DisabledItemSelectionMode = DisabledItemSelectionMode.Skip,
             };
 
-            Menu menu = new Menu(menuTheme, list);
+            var menuItems = new List<MenuItem> { };
 
-            menu.NavigateUp();
+            foreach (int flag in enableFlags)
+            {
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+            }
 
-            Assert.AreEqual(expectedResult, menu.SelectedMenuItem);
+            var menu = new Menu(menuItems, menuTheme);
+
+            for (int i = 0; i < moveCounter; i++)
+            {
+                menu.NavigateUp();
+            }
+
+            MenuItem expectedMenuItem = null;
+
+            if (selectedIndex.HasValue)
+            {
+                expectedMenuItem = menuItems[selectedIndex.Value];
+            }
+
+            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
         }
     }
 }
