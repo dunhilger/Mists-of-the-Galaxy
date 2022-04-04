@@ -6,48 +6,38 @@ namespace MistsOfTheGalaxyMenu
     public class Menu
     {
         public MenuTheme Theme { get; }
+        private int MenuWidth { get; set; }
 
-        public List<MenuItem> MenuItems { get; }
+        private MenuPage MenuPage => MenuPages.Peek();  
 
-        public int MenuWidth { get; }
+        private readonly MenuNavigator _navigator;
 
-        public MenuItem SelectedMenuItem
-        {
-            get 
-            {
-                if (cursorPosition.HasValue)
-                {
-                    return MenuItems[cursorPosition.Value];
-                }
-                else
-                {
-                    return null;
-                }               
-            }
-        }
+        private Stack<MenuPage> MenuPages { get; } = new Stack<MenuPage>();
 
-        private int? cursorPosition = null;
-
-        public Menu(List<MenuItem> menuItems, MenuTheme menuTheme = null)
+        public Menu(MenuPageItemList menuPageItemList, MenuTheme menuTheme = null)
         {
             Theme = menuTheme ?? new MenuTheme();
-            MenuItems = menuItems ?? throw new ArgumentNullException(nameof(menuItems));
+            
+            var menuPageSettings = new MenuPageSettings(Theme.NavigationMode, Theme.DisabledItemSelectionMode);
 
-            MenuWidth = CalculateMenuWidth();
-            SetCursorPosition();
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings);
+
+            MenuPages.Push(menuPage);
+
+            _navigator = new MenuNavigator(this);
         }
 
-        private int CalculateMenuWidth()
+        private int GetMenuWidth()
         {
-            if (MenuItems.Count > 0)
+            if (MenuPage.MenuItems.Count > 0)
             {
                 int menuWidth = 0;
 
-                for (int i = 0; i < MenuItems.Count; i++)
+                for (int i = 0; i < MenuPage.MenuItems.Count; i++)
                 {
-                    if (menuWidth < MenuItems[i].Name.Length)
+                    if (menuWidth < MenuPage.MenuItems[i].Name.Length)
                     {
-                        menuWidth = MenuItems[i].Name.Length;
+                        menuWidth = MenuPage.MenuItems[i].Name.Length;
                     }
                 }
                 return menuWidth += Theme.Indent;
@@ -55,43 +45,97 @@ namespace MistsOfTheGalaxyMenu
             else return 0;
         }
 
-        public void RenderMenu()
+        public void ActivateItem()
         {
-            if (MenuItems.Count > 0)
+            if (MenuPage.SelectedMenuItem.IsEnabled)
             {
+                if (MenuPage.SelectedMenuItem.MenuPageItemList != null)
+                {
+                    MenuPages.Push(MenuPage.GetMenuPage());
+                }
+                else
+                {
+                    MenuPage.SelectedMenuItem?.Action?.Invoke(_navigator);
+                }
+            }
+        }
+
+        public void EnterToNextPage()
+        {
+            if (MenuPage.SelectedMenuItem.IsEnabled)
+            {
+                if (MenuPage.SelectedMenuItem.MenuPageItemList != null)
+                {
+                    MenuPages.Push(MenuPage.GetMenuPage());
+                }
+            }
+        }
+
+        public void TurnToPreviousPage()
+        {
+            if (MenuPages.Count > 1)
+            {
+                MenuPages.Pop();
+            }                    
+        }
+
+        public void TurnToMainPage()
+        {
+            while (MenuPages.Count > 1)
+            {
+                MenuPages.Pop();
+            }
+        }
+
+        public void NavigateUp()
+        {
+            MenuPage.NavigateUp();
+        }
+
+        public void NavigateDown()
+        {
+            MenuPage.NavigateDown();
+        }
+
+        public void RenderMenuPage()
+        {
+            if (MenuPage.MenuItems.Count > 0)
+            {
+                MenuWidth = GetMenuWidth();
+
                 String line = new(Theme.HorisontalLineElement, MenuWidth);
                 SetFrameColor();
                 Console.WriteLine($"{Theme.LeftUpperCorner}{line}{Theme.RightUpperCorner}");
 
-                for (int i = 0; i < MenuItems.Count; i++)
+                for (int i = 0; i < MenuPage.MenuItems.Count; i++)
                 {
-                    int diff = line.Length - MenuItems[i].Name.Length;
+                    int diff = line.Length - MenuPage.MenuItems[i].Name.Length;
                     String leftShift = new(' ', diff / 2);
                     String rightShift = new(' ', diff - leftShift.Length);
 
                     Console.Write($"{Theme.VerticalLineElement}");
 
-                    if (MenuItems[i].IsEnabled)
+                    if (MenuPage.MenuItems[i].IsEnabled)
                     {
-                        if (cursorPosition == i)
+                        if (MenuPage.SelectedMenuItem == MenuPage.MenuItems[i]) 
                             SetSelectedItemColors();
                         else
                             SetNormalItemColors();
                     }
                     else
                     {
-                        if (cursorPosition == i)
+                        if (MenuPage.SelectedMenuItem == MenuPage.MenuItems[i]) 
                             SetSelectedDisabledItemColors();
                         else
                             SetDisabledItemColors();
                     }
 
-                    Console.Write($"{leftShift}{MenuItems[i].Name}{rightShift}");
+                    Console.Write($"{leftShift}{MenuPage.MenuItems[i].Name}{rightShift}");
                     ResetColorMenuItem();
                     SetFrameColor();
                     Console.WriteLine($"{Theme.VerticalLineElement}");
 
-                    if (i < MenuItems.Count - 1)
+                    if (i < MenuPage.MenuItems.Count - 1)
                     {
                         Console.WriteLine($"{Theme.LeftInnerCorner}{line}{Theme.RightInnerCorner}");
                     }
@@ -104,103 +148,7 @@ namespace MistsOfTheGalaxyMenu
             }
         }
 
-        private void Navigate(Func<int, int> getIndex)
-        {
-            if (cursorPosition == null || MenuItems.Count == 0) return;
-
-            int i = cursorPosition.Value;
-
-            while (true)
-            {
-                int previousEnabledIndex = i;
-
-                i = getIndex(i);
-
-                if (Theme.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
-                {
-                    if (i == cursorPosition.Value || MenuItems[i].IsEnabled)
-                    {
-                        break;
-                    }
-                    else if (i == previousEnabledIndex)
-                    {
-                        i = cursorPosition.Value;
-                        break;
-                    }                       
-                }
-                else
-                {
-                    break;
-                }
-            }
-            cursorPosition = i;
-        }
-
-        public void NavigateUp()
-        {
-            Navigate(index =>
-            {
-                index--;
-
-                if (index < 0)
-                {
-                    switch (Theme.NavigationMode)
-                    {
-                        case NavigationMode.LoopOff:
-                            index++;
-                            break;
-                        case NavigationMode.LoopOn:
-                            index = MenuItems.Count - 1;
-                            break;
-                    }
-                }
-                return index;
-            });
-        }
-
-        public void NavigateDown()
-        {
-            Navigate(index =>
-            {
-                index++;
-
-                if (index > MenuItems.Count - 1)
-                {
-                    switch (Theme.NavigationMode)
-                    {
-                        case NavigationMode.LoopOff:
-                            index--;
-                            break;
-                        case NavigationMode.LoopOn:
-                            index = 0;
-                            break;
-                    }
-                }
-                return index;
-            });
-        }
-
-        private void SetCursorPosition()
-        {
-            for (int i = 0; i < MenuItems.Count; i++)
-            {
-                if (Theme.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
-                {
-                    if (MenuItems[i].IsEnabled)
-                    {
-                        cursorPosition = i;
-                        break;
-                    }
-                }
-                else
-                {
-                    cursorPosition = i;
-                    break;
-                }
-            }
-        }
-
-        private void SetSelectedItemColors() 
+        private void SetSelectedItemColors()
         {
             Console.ForegroundColor = Theme.SelectedTextColor;
             Console.BackgroundColor = Theme.SelectedBackgroundColor;
@@ -218,13 +166,13 @@ namespace MistsOfTheGalaxyMenu
             Console.BackgroundColor = Theme.BackgroundColor;
         }
 
-        private void SetSelectedDisabledItemColors() 
+        private void SetSelectedDisabledItemColors()
         {
             Console.ForegroundColor = Theme.SelectedDisabledTextColor;
             Console.BackgroundColor = Theme.SelectedDisabledBackgroundColor;
         }
-        private void SetFrameColor() => Console.ForegroundColor = Theme.FrameColor;       
-        
-        private void ResetColorMenuItem() => Console.ResetColor();       
+        private void SetFrameColor() => Console.ForegroundColor = Theme.FrameColor;
+
+        private void ResetColorMenuItem() => Console.ResetColor();
     }
 }

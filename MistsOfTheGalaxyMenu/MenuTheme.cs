@@ -17,7 +17,7 @@ namespace MistsOfTheGalaxyMenu
     public class MenuTheme
     {
         public NavigationMode NavigationMode { get; set; } = NavigationMode.LoopOn;  
-        public DisabledItemSelectionMode DisabledItemSelectionMode { get; set; } = DisabledItemSelectionMode.Select;
+        public DisabledItemSelectionMode DisabledItemSelectionMode { get; set; } = DisabledItemSelectionMode.Skip;
         public char HorisontalLineElement { get; } = '═';
         public char VerticalLineElement { get; } = '║';
         public char LeftBottomCorner { get; } = '╚';
