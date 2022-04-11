@@ -13,18 +13,21 @@ namespace MistsOfTheGalaxyMenu
 
         public Action<MenuNavigator> Action { get; }
 
-        public MenuItem(string name, bool isEnabled, MenuPageItemList menuPage = null)
-        {
-            Name = name;
-            IsEnabled = isEnabled;
-            MenuPageItemList = menuPage;
-        }
+        public Action<MenuDecorator> ThemeSelector { get; }
+
 
         public MenuItem(string name, bool isEnabled, Action<MenuNavigator> action)
         {
             Name = name;
             IsEnabled = isEnabled;
             Action = action;
+        } 
+        
+        public MenuItem(string name, bool isEnabled, Action<MenuDecorator> themeSelector)
+        {
+            Name = name;
+            IsEnabled = isEnabled;
+            ThemeSelector = themeSelector;  
         }
     }
 }

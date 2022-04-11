@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MistsOfTheGalaxyMenu
 {
@@ -23,6 +20,16 @@ namespace MistsOfTheGalaxyMenu
         public void TurnToMainPage()
         {
             _menu.TurnToMainPage();
+        }
+
+        public void NavigateToNextPage(MenuPageItemList menuPageItemList)
+        {
+            _menu.NavigateToNextPage(menuPageItemList);  
+        }
+
+        public void InsertPlug()
+        {
+            _menu.InsertPlug();
         }
     }
 }

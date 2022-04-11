@@ -12,6 +12,8 @@ namespace MistsOfTheGalaxyMenu
 
         private readonly MenuNavigator _navigator;
 
+        private readonly MenuDecorator _decorator;
+
         private Stack<MenuPage> MenuPages { get; } = new Stack<MenuPage>();
 
         public Menu(MenuPageItemList menuPageItemList, MenuTheme menuTheme = null)
@@ -25,6 +27,8 @@ namespace MistsOfTheGalaxyMenu
             MenuPages.Push(menuPage);
 
             _navigator = new MenuNavigator(this);
+
+            _decorator = new MenuDecorator(this);
         }
 
         private int GetMenuWidth()
@@ -49,26 +53,29 @@ namespace MistsOfTheGalaxyMenu
         {
             if (MenuPage.SelectedMenuItem.IsEnabled)
             {
-                if (MenuPage.SelectedMenuItem.MenuPageItemList != null)
-                {
-                    MenuPages.Push(MenuPage.GetMenuPage());
-                }
-                else
-                {
-                    MenuPage.SelectedMenuItem?.Action?.Invoke(_navigator);
-                }
+                MenuPage.SelectedMenuItem?.Action?.Invoke(_navigator);
+                MenuPage.SelectedMenuItem?.ThemeSelector?.Invoke(_decorator);
             }
         }
 
-        public void EnterToNextPage()
+        public void SwitchOnLightTheme()
         {
-            if (MenuPage.SelectedMenuItem.IsEnabled)
-            {
-                if (MenuPage.SelectedMenuItem.MenuPageItemList != null)
-                {
-                    MenuPages.Push(MenuPage.GetMenuPage());
-                }
-            }
+            Theme.BackgroundColor = ConsoleColor.Gray;
+        }
+
+        public void SwitchOnDarkTheme()
+        {
+            Theme.BackgroundColor = ConsoleColor.Black;
+        }
+
+        public void InsertPlug()
+        {
+            
+        }
+
+        public void NavigateToNextPage(MenuPageItemList menuPageItemList)
+        {
+             MenuPages.Push(MenuPage.GetMenuPage(menuPageItemList));
         }
 
         public void TurnToPreviousPage()

@@ -26,18 +26,18 @@ namespace MistsOfTheGalaxyMenu
 
         private readonly MenuPageSettings _menuPageSettings;
 
-        public MenuPage(MenuPageItemList menuPage, MenuPageSettings menuPageSettings)
+        public MenuPage(MenuPageItemList menuPageItemList, MenuPageSettings menuPageSettings)
         {
-            MenuItems = menuPage?.MenuItems ?? throw new ArgumentNullException(nameof(menuPage));
+            MenuItems = menuPageItemList?.MenuItems ?? throw new ArgumentNullException(nameof(menuPageItemList));
 
             _menuPageSettings = menuPageSettings;
 
             SetCursorPosition();
         }
 
-        public MenuPage GetMenuPage()
+        public MenuPage GetMenuPage(MenuPageItemList menuPageItemList)
         {
-            var nextPage = new MenuPage(SelectedMenuItem.MenuPageItemList, _menuPageSettings);
+            var nextPage = new MenuPage(menuPageItemList, _menuPageSettings);
 
             return nextPage;
         }
