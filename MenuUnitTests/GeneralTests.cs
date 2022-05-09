@@ -1,4 +1,5 @@
 ﻿using MistsOfTheGalaxyMenu;
+using MistsOfTheGalaxyMenu.Interfaces;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,17 @@ namespace MenuUnitTests
         {
             get
             {
-                yield return new TestCaseData(new List<MenuItem> { }, 0);
-                yield return new TestCaseData(new List<MenuItem> { new MenuItem("a", false) }, 7);
-                yield return new TestCaseData(new List<MenuItem>
+                Action<MenuNavigator> _noAction = n => { };
+
+                yield return new TestCaseData(new List<IMenuItem> { }, 0);
+                yield return new TestCaseData(new List<IMenuItem> { new MenuItem("a", false, _noAction) }, 7);
+                yield return new TestCaseData(new List<IMenuItem>
                 {
-                    new MenuItem("ab", true),
-                    new MenuItem("abc", true),
-                    new MenuItem("abcd", true),
-                    new MenuItem("abcde", true),
-                    new MenuItem("abcdef", true),
+                    new MenuItem("ab", true, _noAction),
+                    new MenuItem("abc", true, _noAction),
+                    new MenuItem("abcd", true, _noAction),
+                    new MenuItem("abcde", true, _noAction),
+                    new MenuItem("abcdef", true, _noAction),
                 }, 12);
             }
         }
@@ -28,10 +31,11 @@ namespace MenuUnitTests
         [TestCaseSource(nameof(GetMenuWidth_TestDataCase))]
 
         [Test]
-        public void Get_MenuWidth_Test(List<MenuItem> list, int expectedResult)
+        public void Get_MenuWidth_Test(List<IMenuItem> list, int expectedResult)
         {
             var menuTheme = new MenuTheme();
-            var menu = new Menu(list, menuTheme);
+            var menuPageItemList = new MenuPageItemList(list);
+            var menu = new Menu(menuPageItemList, menuTheme);
 
             Assert.AreEqual(expectedResult, menu.MenuWidth);
         }
@@ -40,15 +44,17 @@ namespace MenuUnitTests
         {
             get
             {
-                yield return new TestCaseData(new List<MenuItem> { }, 0);
-                yield return new TestCaseData(new List<MenuItem> { new MenuItem("a", false) }, 1);
-                yield return new TestCaseData(new List<MenuItem>
+                Action<MenuNavigator> _noAction = n => { };
+
+                yield return new TestCaseData(new List<IMenuItem> { }, 0);
+                yield return new TestCaseData(new List<IMenuItem> { new MenuItem("a", false, _noAction) }, 1);
+                yield return new TestCaseData(new List<IMenuItem>
                 {
-                    new MenuItem("ab", true),
-                    new MenuItem("abc", true),
-                    new MenuItem("abcd", true),
-                    new MenuItem("abcde", true),
-                    new MenuItem("abcdef", true),
+                    new MenuItem("ab", true, _noAction),
+                    new MenuItem("abc", true, _noAction),
+                    new MenuItem("abcd", true, _noAction),
+                    new MenuItem("abcde", true, _noAction),
+                    new MenuItem("abcdef", true, _noAction),
                 }, 5);
             }
         }
@@ -65,7 +71,7 @@ namespace MenuUnitTests
         public void Theme_Test()
         {
             var menuTheme = new MenuTheme();
-            var menu = new Menu(new List<MenuItem>(), menuTheme);
+            var menu = new Menu(new MenuPageItemList(new List<IMenuItem>()), menuTheme);
 
             Assert.AreEqual(menuTheme, menu.Theme);
         }
@@ -73,7 +79,7 @@ namespace MenuUnitTests
         [Test]
         public void Menu_Default_Theme_Test()
         {
-            var menu = new Menu(new List<MenuItem>());
+            var menu = new Menu(new MenuPageItemList(new List<IMenuItem>()));
 
             Assert.NotNull(menu.Theme);
         }

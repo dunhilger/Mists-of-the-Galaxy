@@ -1,12 +1,13 @@
 ﻿using MistsOfTheGalaxyMenu.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace MistsOfTheGalaxyMenu
 {
     /// <summary>
-    /// Класс для создания команды меню
+    /// Класс для создания опциональной команды меню
     /// </summary>
-    public class MenuItem : IMenuItem
+    public class MenuItemOptional : IMenuItem
     {
         /// <summary>
         /// <inheritdoc cref="IMenuItem.Name"/>
@@ -29,12 +30,12 @@ namespace MistsOfTheGalaxyMenu
         public Action<MenuDecorator> DecoratorAction { get; }
 
         /// <summary>
-        /// Создание экземпляра <see cref="MenuItem"/> с функцией навигации
+        /// Создание экземпляра <see cref="MenuItemOptional"/> с функцией навигации
         /// </summary>
         /// <param name="name">Имя команды</param>
         /// <param name="isEnabled">Доступность команды</param>
         /// <param name="action">Действие команды</param>
-        public MenuItem(string name, bool isEnabled, Action<MenuNavigator> action)
+        public MenuItemOptional(string name, bool isEnabled, Action<MenuNavigator> action)
         {
             Name = name;
             IsEnabled = isEnabled;
@@ -42,12 +43,12 @@ namespace MistsOfTheGalaxyMenu
         }
 
         /// <summary>
-        /// Создание экземпляра <see cref="MenuItem"/> с функцией управления темой меню 
+        /// Создание экземпляра <see cref="MenuItemOptional"/> с функцией управления темой меню 
         /// </summary>
         /// <param name="name">Имя команды</param>
         /// <param name="isEnabled">Доступность команды</param>
         /// <param name="action">Действие команды</param>
-        public MenuItem(string name, bool isEnabled, Action<MenuDecorator> action)
+        public MenuItemOptional(string name, bool isEnabled, Action<MenuDecorator> action)
         {
             Name = name;
             IsEnabled = isEnabled;

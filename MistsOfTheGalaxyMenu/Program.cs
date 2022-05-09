@@ -1,42 +1,62 @@
-﻿using System;
+﻿using MistsOfTheGalaxyMenu.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace MistsOfTheGalaxyMenu
 {
     class Program
     {
+        private static Action<MenuNavigator> _noAction = n => { };
+
         static void Main(string[] args)
         {
-            var selectGameMode = new List<MenuItem>
+            var lightTheme = new MenuTheme()
             {
-                new MenuItem("Простой", true, n => n.InsertPlug()),
-                new MenuItem("Средний", true, n => n.InsertPlug()),
-                new MenuItem("Сложный", true, n => n.InsertPlug()),
+                FrameColor = ConsoleColor.White,
+                BackgroundColor = ConsoleColor.White,
+                TextColor = ConsoleColor.Black,
+                SelectedTextColor = ConsoleColor.DarkGreen,
+                DisabledBackgroundColor = ConsoleColor.White,
+                DisabledTextColor = ConsoleColor.Gray
+            };
+
+            var darkTheme = new MenuTheme()
+            {
+                FrameColor = ConsoleColor.DarkGray,
+                TextColor = ConsoleColor.White,
+                SelectedBackgroundColor = ConsoleColor.Gray
+            };
+        
+            var selectGameMode = new List<IMenuItem>
+            {
+                new MenuItemOptional("Простой", true, _noAction),
+                new MenuItemOptional("Средний", true, _noAction),
+                new MenuItemOptional("Сложный", true, _noAction),
                 new MenuItem("Назад", true, n => n.TurnToPreviousPage()),
             };
             var page_3 = new MenuPageItemList(selectGameMode);
 
-            var selectMenuTheme = new List<MenuItem>
+            var selectMenuTheme = new List<IMenuItem>
             {
-                new MenuItem("Темная", true, d => d.SwitchOnDarkTheme()),
-                new MenuItem("Светлая", true, d => d.SwitchOnLightTheme()),
+                new MenuItemOptional("Светлая", true, d => d.SetTheme(lightTheme)),
+                new MenuItemOptional("Темная", true, d => d.SetTheme(darkTheme)),
                 new MenuItem("На главную", true, n => n.TurnToMainPage()),
             };
             var page_4 = new MenuPageItemList(selectMenuTheme);
 
-            var mainSettings = new List<MenuItem>
+            var mainSettings = new List<IMenuItem>
             {
-                new MenuItem("Уровень сложности", true, n => n.NavigateToNextPage(page_3)/*, page_3*/),
-                new MenuItem("Тема", true, n => n.NavigateToNextPage(page_4)/*, page_4*/),
+                new MenuItem("Уровень сложности", true, n => n.NavigateToNextPage(page_3)),
+                new MenuItem("Тема", true, n => n.NavigateToNextPage(page_4)),
             };
             var page_2 = new MenuPageItemList(mainSettings);
 
-            var mainMenuCommands = new List<MenuItem>
+            var mainMenuCommands = new List<IMenuItem>
             {
-                new MenuItem("Новая игра", true, n => n.InsertPlug()),
-                new MenuItem("Продолжить", false, n => n.InsertPlug()),
-                new MenuItem("Настройки", true, n => n.NavigateToNextPage(page_2)/*, page_2*/),
-                new MenuItem("Выход", true, n => n.InsertPlug()),
+                new MenuItem("Новая игра", true, _noAction),
+                new MenuItem("Продолжить", false, _noAction),
+                new MenuItem("Настройки", true, n => n.NavigateToNextPage(page_2)),
+                new MenuItem("Выход", true, n => n.CloseMenu()),
             };
             var page_1 = new MenuPageItemList(mainMenuCommands);
 

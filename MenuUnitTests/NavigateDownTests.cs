@@ -1,4 +1,5 @@
 ﻿using MistsOfTheGalaxyMenu;
+using MistsOfTheGalaxyMenu.Interfaces;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -18,19 +19,17 @@ namespace MenuUnitTests
             DisabledItemSelectionMode disabledItemSelectionMode,
             NavigationMode navigationMode)
         {
-            var menuItems = new List<MenuItem> { };
+            var menuItems = new List<IMenuItem> { };
 
-            var menuTheme = new MenuTheme()
-            {
-                DisabledItemSelectionMode = disabledItemSelectionMode,
-                NavigationMode = navigationMode,
-            };
+            var menuPageItemList = new MenuPageItemList(menuItems);
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageSettings = new MenuPageSettings(navigationMode, disabledItemSelectionMode);
 
-            menu.NavigateDown();
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
 
-            Assert.AreEqual(null, menu.SelectedMenuItem);
+            menuPage.NavigateDown();
+
+            Assert.AreEqual(null, menuPage.SelectedMenuItem);
         }
 
         [TestCase(DisabledItemSelectionMode.Select, NavigationMode.LoopOn)]
@@ -43,19 +42,19 @@ namespace MenuUnitTests
             DisabledItemSelectionMode disabledItemSelectionMode,
             NavigationMode navigationMode)
         {
-            var menuItems = new List<MenuItem> { new MenuItem("a", true) };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuTheme = new MenuTheme()
-            {
-                DisabledItemSelectionMode = disabledItemSelectionMode,
-                NavigationMode = navigationMode,
-            };
+            var menuItems = new List<IMenuItem> { new MenuItem("a", true, _noAction) };
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
 
-            menu.NavigateDown();
+            var menuPageSettings = new MenuPageSettings(navigationMode, disabledItemSelectionMode);
 
-            Assert.AreEqual(menuItems[0], menu.SelectedMenuItem);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+
+            menuPage.NavigateDown();
+
+            Assert.AreEqual(menuItems[0], menuPage.SelectedMenuItem);
         }
 
         [TestCase(NavigationMode.LoopOn)]
@@ -64,19 +63,19 @@ namespace MenuUnitTests
         [Test]
         public void Check_Select_Mode_OneDisabledMenuItem(NavigationMode navigationMode)
         {
-            var menuItems = new List<MenuItem> { new MenuItem("a", false) };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuTheme = new MenuTheme()
-            {
-                DisabledItemSelectionMode = DisabledItemSelectionMode.Select,
-                NavigationMode = navigationMode,
-            };
+            var menuItems = new List<IMenuItem> { new MenuItem("a", false, _noAction) };
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
 
-            menu.NavigateDown();
+            var menuPageSettings = new MenuPageSettings(navigationMode, DisabledItemSelectionMode.Select);
 
-            Assert.AreEqual(menuItems[0], menu.SelectedMenuItem);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+
+            menuPage.NavigateDown();
+
+            Assert.AreEqual(menuItems[0], menuPage.SelectedMenuItem);
         }
 
         [TestCase(NavigationMode.LoopOn)]
@@ -85,19 +84,19 @@ namespace MenuUnitTests
         [Test]
         public void Check_Skip_Mode_OneDisabledMenuItem(NavigationMode navigationMode)
         {
-            var menuItems = new List<MenuItem> { new MenuItem("a", false) };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuTheme = new MenuTheme()
-            {
-                DisabledItemSelectionMode = DisabledItemSelectionMode.Skip,
-                NavigationMode = navigationMode,
-            };
+            var menuItems = new List<IMenuItem> { new MenuItem("a", false, _noAction) };
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
 
-            menu.NavigateDown();
+            var menuPageSettings = new MenuPageSettings(navigationMode, DisabledItemSelectionMode.Skip);
 
-            Assert.AreEqual(null, menu.SelectedMenuItem);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+
+            menuPage.NavigateDown();
+
+            Assert.AreEqual(null, menuPage.SelectedMenuItem);
         }
 
         [TestCase(new int[] { 1, 0, 1 }, 3, 0)]
@@ -107,34 +106,34 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOn_Select_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            var menuTheme = new MenuTheme()
-            {
-                NavigationMode = NavigationMode.LoopOn,
-                DisabledItemSelectionMode = DisabledItemSelectionMode.Select,
-            };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuItems = new List<MenuItem> { };
+            var menuItems = new List<IMenuItem> { };
 
             foreach (int flag in enableFlags)
             {
-                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag), _noAction));
             }
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
+
+            var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOn, DisabledItemSelectionMode.Select);
+
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
-                menu.NavigateDown();
+                menuPage.NavigateDown();
             }
 
             MenuItem expectedMenuItem = null;
 
             if (selectedIndex.HasValue)
             {
-                expectedMenuItem = menuItems[selectedIndex.Value];
+                expectedMenuItem = (MenuItem)menuItems[selectedIndex.Value];
             }
 
-            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
+            Assert.AreEqual(expectedMenuItem, menuPage.SelectedMenuItem);
         }
 
         [TestCase(new int[] { 1, 0, 1 }, 3, 2)]
@@ -144,34 +143,34 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOff_Select_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            var menuTheme = new MenuTheme()
-            {
-                NavigationMode = NavigationMode.LoopOff,
-                DisabledItemSelectionMode = DisabledItemSelectionMode.Select,
-            };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuItems = new List<MenuItem> { };
+            var menuItems = new List<IMenuItem> { };
 
             foreach (int flag in enableFlags)
             {
-                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag), _noAction));
             }
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
+
+            var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOff, DisabledItemSelectionMode.Select);
+
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
-                menu.NavigateDown();
+                menuPage.NavigateDown();
             }
 
             MenuItem expectedMenuItem = null;
 
             if (selectedIndex.HasValue)
             {
-                expectedMenuItem = menuItems[selectedIndex.Value];
+                expectedMenuItem = (MenuItem)menuItems[selectedIndex.Value];
             }
 
-            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
+            Assert.AreEqual(expectedMenuItem, menuPage.SelectedMenuItem);
         }
 
         [TestCase(new int[] { 1, 0, 1 }, 2, 0)]
@@ -181,34 +180,34 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOn_Skip_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            var menuTheme = new MenuTheme()
-            {
-                NavigationMode = NavigationMode.LoopOn,
-                DisabledItemSelectionMode = DisabledItemSelectionMode.Skip,
-            };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuItems = new List<MenuItem> { };
+            var menuItems = new List<IMenuItem> { };
 
             foreach (int flag in enableFlags)
             {
-                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag), _noAction));
             }
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
+
+            var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOn, DisabledItemSelectionMode.Skip);
+
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
-                menu.NavigateDown();
+                menuPage.NavigateDown();
             }
 
             MenuItem expectedMenuItem = null;
 
             if (selectedIndex.HasValue)
             {
-                expectedMenuItem = menuItems[selectedIndex.Value];
+                expectedMenuItem = (MenuItem)menuItems[selectedIndex.Value];
             }
 
-            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
+            Assert.AreEqual(expectedMenuItem, menuPage.SelectedMenuItem);
         }
 
         [TestCase(new int[] { 1, 0, 0, 1 }, 2, 3)]
@@ -218,34 +217,34 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOff_Skip_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            var menuTheme = new MenuTheme()
-            {
-                NavigationMode = NavigationMode.LoopOff,
-                DisabledItemSelectionMode = DisabledItemSelectionMode.Skip,
-            };
+            Action<MenuNavigator> _noAction = n => { };
 
-            var menuItems = new List<MenuItem> { };
+            var menuItems = new List<IMenuItem> { };
 
             foreach (int flag in enableFlags)
             {
-                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag)));
+                menuItems.Add(new MenuItem("a", Convert.ToBoolean(flag), _noAction));
             }
 
-            var menu = new Menu(menuItems, menuTheme);
+            var menuPageItemList = new MenuPageItemList(menuItems);
+
+            var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOff, DisabledItemSelectionMode.Skip);
+
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
-                menu.NavigateDown();
+                menuPage.NavigateDown();
             }
 
             MenuItem expectedMenuItem = null;
 
             if (selectedIndex.HasValue)
             {
-                expectedMenuItem = menuItems[selectedIndex.Value];
+                expectedMenuItem = (MenuItem)menuItems[selectedIndex.Value];
             }
 
-            Assert.AreEqual(expectedMenuItem, menu.SelectedMenuItem);
+            Assert.AreEqual(expectedMenuItem, menuPage.SelectedMenuItem);
         }
     }
 }

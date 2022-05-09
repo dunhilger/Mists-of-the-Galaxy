@@ -1,13 +1,23 @@
-﻿using System;
+﻿using MistsOfTheGalaxyMenu.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace MistsOfTheGalaxyMenu
 {
-    internal class MenuPage
+    /// <summary>
+    /// Класс создания страницы меню
+    /// </summary>
+    public class MenuPage
     {
-        public List<MenuItem> MenuItems { get; }
+        /// <summary>
+        /// Список команд страницы
+        /// </summary>
+        public List<IMenuItem> MenuItems { get; }
 
-        public MenuItem SelectedMenuItem
+        /// <summary>
+        /// Команда меню, выделенная курсором 
+        /// </summary>
+        public IMenuItem SelectedMenuItem
         {
             get
             {
@@ -22,24 +32,46 @@ namespace MistsOfTheGalaxyMenu
             }
         }
 
+        /// <summary>
+        /// Команда меню, отмеченная индикатором  
+        /// </summary>
+        public MenuItemOptional IndicatedMenuItem { get; private set; }
+
         private int? cursorPosition = null;
+
+        private readonly MenuPageItemList _menuPageItemList;
 
         private readonly MenuPageSettings _menuPageSettings;
 
-        public MenuPage(MenuPageItemList menuPageItemList, MenuPageSettings menuPageSettings)
+        private readonly MenuNavigator _navigator;
+
+        private readonly MenuDecorator _decorator;
+
+        /// <summary>
+        /// Создание экземпляра <see cref="MenuPage"/>
+        /// </summary>
+        /// <param name="menuPageItemList">Экземпляр класса <see cref="MenuPageItemList"/></param>
+        /// <param name="menuPageSettings">Экземпляр класса <see cref="MenuPageSettings"/></param>
+        /// <param name="navigator">Экземпляр класса <see cref="MenuNavigator"/></param>
+        /// <param name="decorator">Экземпляр класса <see cref="MenuDecorator"/></param>
+        public MenuPage(MenuPageItemList menuPageItemList, 
+            MenuPageSettings menuPageSettings,
+            MenuNavigator navigator,
+            MenuDecorator decorator)
         {
-            MenuItems = menuPageItemList?.MenuItems ?? throw new ArgumentNullException(nameof(menuPageItemList));
+            _menuPageItemList = menuPageItemList;
+
+            IndicatedMenuItem = menuPageItemList?.IsIndicate;
+
+            MenuItems = _menuPageItemList?.MenuItems ?? throw new ArgumentNullException(nameof(menuPageItemList));
 
             _menuPageSettings = menuPageSettings;
 
+            _navigator = navigator;
+
+            _decorator = decorator;
+
             SetCursorPosition();
-        }
-
-        public MenuPage GetMenuPage(MenuPageItemList menuPageItemList)
-        {
-            var nextPage = new MenuPage(menuPageItemList, _menuPageSettings);
-
-            return nextPage;
         }
 
         private void Navigate(Func<int, int> getIndex)
@@ -74,6 +106,27 @@ namespace MistsOfTheGalaxyMenu
             cursorPosition = i;
         }
 
+        /// <summary>
+        /// Активация команды, выделенной курсором 
+        /// </summary>
+        internal void ActivateItem()
+        {
+            if (SelectedMenuItem != null && SelectedMenuItem.IsEnabled)
+            {
+                if (SelectedMenuItem is MenuItemOptional menuItemOptional)
+                {
+                    _menuPageItemList.IsIndicate = menuItemOptional;
+                    IndicatedMenuItem = _menuPageItemList.IsIndicate;                 
+                }
+
+                SelectedMenuItem.DecoratorAction?.Invoke(_decorator);
+                SelectedMenuItem.NavigatorAction?.Invoke(_navigator);
+            }
+        }
+
+        /// <summary>
+        /// Навигация по странице вверх
+        /// </summary>
         public void NavigateUp()
         {
             Navigate(index =>
@@ -96,6 +149,9 @@ namespace MistsOfTheGalaxyMenu
             });
         }
 
+        /// <summary>
+        /// Навигация по странице вниз
+        /// </summary>
         public void NavigateDown()
         {
             Navigate(index =>
