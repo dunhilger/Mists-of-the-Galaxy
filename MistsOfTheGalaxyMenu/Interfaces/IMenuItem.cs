@@ -20,11 +20,6 @@ namespace MistsOfTheGalaxyMenu.Interfaces
         /// <summary>
         /// Действие навигационного типа
         /// </summary>
-        Action<MenuNavigator> NavigatorAction { get; }
-
-        /// <summary>
-        /// Действие по управлению темой меню
-        /// </summary>
-        Action<MenuDecorator> DecoratorAction { get; }
+        Action<IMenuFunctionalityProvider> NavigatorAction { get; }
     }
 }

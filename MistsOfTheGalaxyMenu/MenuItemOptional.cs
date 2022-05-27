@@ -1,6 +1,5 @@
 ﻿using MistsOfTheGalaxyMenu.Interfaces;
 using System;
-using System.Collections.Generic;
 
 namespace MistsOfTheGalaxyMenu
 {
@@ -9,6 +8,19 @@ namespace MistsOfTheGalaxyMenu
     /// </summary>
     public class MenuItemOptional : IMenuItem
     {
+        /// <summary>
+        /// Создание экземпляра <see cref="MenuItemOptional"/> с функцией навигации
+        /// </summary>
+        /// <param name="name">Имя команды</param>
+        /// <param name="isEnabled">Доступность команды</param>
+        /// <param name="action">Действие команды</param>
+        public MenuItemOptional(string name, bool isEnabled, Action<IMenuFunctionalityProvider> action)
+        {
+            Name = name;
+            IsEnabled = isEnabled;
+            NavigatorAction = action;
+        }
+
         /// <summary>
         /// <inheritdoc cref="IMenuItem.Name"/>
         /// </summary>
@@ -22,37 +34,6 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// <inheritdoc cref="IMenuItem.NavigatorAction"/>
         /// </summary>
-        public Action<MenuNavigator> NavigatorAction { get; }
-
-        /// <summary>
-        /// <inheritdoc cref="IMenuItem.DecoratorAction"/>
-        /// </summary>
-        public Action<MenuDecorator> DecoratorAction { get; }
-
-        /// <summary>
-        /// Создание экземпляра <see cref="MenuItemOptional"/> с функцией навигации
-        /// </summary>
-        /// <param name="name">Имя команды</param>
-        /// <param name="isEnabled">Доступность команды</param>
-        /// <param name="action">Действие команды</param>
-        public MenuItemOptional(string name, bool isEnabled, Action<MenuNavigator> action)
-        {
-            Name = name;
-            IsEnabled = isEnabled;
-            NavigatorAction = action;
-        }
-
-        /// <summary>
-        /// Создание экземпляра <see cref="MenuItemOptional"/> с функцией управления темой меню 
-        /// </summary>
-        /// <param name="name">Имя команды</param>
-        /// <param name="isEnabled">Доступность команды</param>
-        /// <param name="action">Действие команды</param>
-        public MenuItemOptional(string name, bool isEnabled, Action<MenuDecorator> action)
-        {
-            Name = name;
-            IsEnabled = isEnabled;
-            DecoratorAction = action;
-        }
+        public Action<IMenuFunctionalityProvider> NavigatorAction { get; }
     }
 }

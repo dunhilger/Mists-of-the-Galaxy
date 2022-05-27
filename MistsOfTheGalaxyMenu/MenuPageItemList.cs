@@ -10,6 +10,15 @@ namespace MistsOfTheGalaxyMenu
     public class MenuPageItemList 
     {
         /// <summary>
+        /// Создание экземпляра <see cref="MenuPageItemList"/>
+        /// </summary>
+        /// <param name="menuItems">Список команд страницы меню</param>
+        public MenuPageItemList(List<IMenuItem> menuItems)
+        {
+            MenuItems = menuItems ?? throw new ArgumentNullException(nameof(menuItems));
+        }
+
+        /// <summary>
         /// Список команд страницы меню
         /// </summary>
         public List<IMenuItem> MenuItems { get; }
@@ -18,14 +27,5 @@ namespace MistsOfTheGalaxyMenu
         /// Команда меню, отмеченная индикатором 
         /// </summary>
         public MenuItemOptional IsIndicate { get; set; }
-
-        /// <summary>
-        /// Создание экземпляра <see cref="MenuPageItemList"/>
-        /// </summary>
-        /// <param name="menuItems">Список команд страницы меню</param>
-        public MenuPageItemList(List<IMenuItem> menuItems)
-        {
-            MenuItems = menuItems ?? throw new ArgumentNullException(nameof(menuItems));
-        }
     }
 }

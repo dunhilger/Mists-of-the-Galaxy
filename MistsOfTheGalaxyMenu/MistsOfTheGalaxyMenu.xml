@@ -4,6 +4,86 @@
         <name>MistsOfTheGalaxyMenu</name>
     </assembly>
     <members>
+        <member name="T:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider">
+            <summary>
+            Ложный класс - поставщик функционала меню
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider.#ctor(MistsOfTheGalaxyMenu.MenuNavigatorParameters)">
+            <summary>
+            Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider"/>
+            </summary>
+            <param name="menuNavigatorParameters">Параметры навигации меню</param>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider.CloseMenu">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.CloseMenu"/>
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider.NavigateToNextPage(MistsOfTheGalaxyMenu.MenuPageItemList)">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.NavigateToNextPage(MistsOfTheGalaxyMenu.MenuPageItemList)"/>
+            </summary>
+            <param name="menuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider.SetTheme(MistsOfTheGalaxyMenu.MenuTheme)">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.SetTheme(MistsOfTheGalaxyMenu.MenuTheme)"/>
+            </summary>
+            <param name="theme">Тема меню.</param>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider.TurnToMainPage">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.TurnToMainPage"/>
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.FakeMenuFunctionalityProvider.TurnToPreviousPage">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.TurnToPreviousPage"/>
+            </summary>
+        </member>
+        <member name="T:MistsOfTheGalaxyMenu.MenuNavigatorParameters">
+            <summary>
+            Класс для хранения параметров навигации меню
+            </summary>
+        </member>
+        <member name="P:MistsOfTheGalaxyMenu.MenuNavigatorParameters.MenuPageItemList">
+            <summary>
+            Список команд страницы
+            </summary>
+        </member>
+        <member name="T:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider">
+            <summary>
+            Интерфейс класса - поставщика функционала меню
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.TurnToPreviousPage">
+            <summary>
+            Возврат на предыдущую страницу меню
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.TurnToMainPage">
+            <summary>
+            Возврат на главную страницу меню
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.CloseMenu">
+            <summary>
+            Завершение работы меню
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.NavigateToNextPage(MistsOfTheGalaxyMenu.MenuPageItemList)">
+            <summary>
+            Переход к следующей странице меню
+            </summary>
+            <param name="menuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.SetTheme(MistsOfTheGalaxyMenu.MenuTheme)">
+            <summary>
+            Устанавливает тему меню.
+            </summary>
+            <param name="theme">Тема меню.</param>
+        </member>
         <member name="T:MistsOfTheGalaxyMenu.Interfaces.IMenuItem">
             <summary>
             Интерфейс команды меню
@@ -24,19 +104,19 @@
             Действие навигационного типа
             </summary>
         </member>
-        <member name="P:MistsOfTheGalaxyMenu.Interfaces.IMenuItem.DecoratorAction">
-            <summary>
-            Действие по управлению темой меню
-            </summary>
-        </member>
         <member name="T:MistsOfTheGalaxyMenu.Menu">
             <summary>
-            Класс для создания меню/Класс типа меню
+            Класс для создания меню
             </summary>
         </member>
         <member name="P:MistsOfTheGalaxyMenu.Menu.Theme">
             <summary>
             Тема меню
+            </summary>
+        </member>
+        <member name="P:MistsOfTheGalaxyMenu.Menu.MenuWidth">
+            <summary>
+            Ширина страницы меню
             </summary>
         </member>
         <member name="M:MistsOfTheGalaxyMenu.Menu.#ctor(MistsOfTheGalaxyMenu.MenuPageItemList,MistsOfTheGalaxyMenu.MenuTheme)">
@@ -88,27 +168,48 @@
             Навигация по странице вниз
             </summary>
         </member>
-        <member name="M:MistsOfTheGalaxyMenu.Menu.RenderMenuPage">
+        <member name="T:MistsOfTheGalaxyMenu.MenuBuilder">
             <summary>
-            Построение страниц меню
+            Класс для построения меню 
             </summary>
         </member>
-        <member name="T:MistsOfTheGalaxyMenu.MenuDecorator">
+        <member name="T:MistsOfTheGalaxyMenu.MenuFunctionalityProvider">
             <summary>
-            Класс для редактирования темы меню.
+            Класс - поставщик функционала меню
             </summary>
         </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuDecorator.#ctor(MistsOfTheGalaxyMenu.Menu)">
+        <member name="M:MistsOfTheGalaxyMenu.MenuFunctionalityProvider.#ctor(MistsOfTheGalaxyMenu.Menu)">
             <summary>
-            Создает экземпляр <see cref="T:MistsOfTheGalaxyMenu.MenuDecorator"/>.
+            Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuFunctionalityProvider"/>
             </summary>
             <param name="menu">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.Menu"/></param>
         </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuDecorator.SetTheme(MistsOfTheGalaxyMenu.MenuTheme)">
+        <member name="M:MistsOfTheGalaxyMenu.MenuFunctionalityProvider.TurnToPreviousPage">
             <summary>
-            Устанавливает тему меню.
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.TurnToPreviousPage"/>
             </summary>
-            <param name="theme">Тема меню.</param>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.MenuFunctionalityProvider.TurnToMainPage">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.TurnToMainPage"/>
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.MenuFunctionalityProvider.CloseMenu">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.CloseMenu"/>
+            </summary>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.MenuFunctionalityProvider.NavigateToNextPage(MistsOfTheGalaxyMenu.MenuPageItemList)">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.NavigateToNextPage(MistsOfTheGalaxyMenu.MenuPageItemList)"/>
+            </summary>
+            <param name="menuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MistsOfTheGalaxyMenu.MenuFunctionalityProvider.SetTheme(MistsOfTheGalaxyMenu.MenuTheme)">
+            <summary>
+            <inheritdoc cref="M:MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider.SetTheme(MistsOfTheGalaxyMenu.MenuTheme)"/>
+            </summary>
+            <param name="theme">Тема меню</param>
         </member>
         <member name="T:MistsOfTheGalaxyMenu.MenuItem">
             <summary>
@@ -130,22 +231,9 @@
             <inheritdoc cref="P:MistsOfTheGalaxyMenu.Interfaces.IMenuItem.NavigatorAction"/>
             </summary>
         </member>
-        <member name="P:MistsOfTheGalaxyMenu.MenuItem.DecoratorAction">
-            <summary>
-            <inheritdoc cref="P:MistsOfTheGalaxyMenu.Interfaces.IMenuItem.DecoratorAction"/>
-            </summary>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuItem.#ctor(System.String,System.Boolean,System.Action{MistsOfTheGalaxyMenu.MenuNavigator})">
+        <member name="M:MistsOfTheGalaxyMenu.MenuItem.#ctor(System.String,System.Boolean,System.Action{MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider})">
             <summary>
             Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuItem"/> с функцией навигации
-            </summary>
-            <param name="name">Имя команды</param>
-            <param name="isEnabled">Доступность команды</param>
-            <param name="action">Действие команды</param>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuItem.#ctor(System.String,System.Boolean,System.Action{MistsOfTheGalaxyMenu.MenuDecorator})">
-            <summary>
-            Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuItem"/> с функцией управления темой меню 
             </summary>
             <param name="name">Имя команды</param>
             <param name="isEnabled">Доступность команды</param>
@@ -171,58 +259,13 @@
             <inheritdoc cref="P:MistsOfTheGalaxyMenu.Interfaces.IMenuItem.NavigatorAction"/>
             </summary>
         </member>
-        <member name="P:MistsOfTheGalaxyMenu.MenuItemOptional.DecoratorAction">
-            <summary>
-            <inheritdoc cref="P:MistsOfTheGalaxyMenu.Interfaces.IMenuItem.DecoratorAction"/>
-            </summary>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuItemOptional.#ctor(System.String,System.Boolean,System.Action{MistsOfTheGalaxyMenu.MenuNavigator})">
+        <member name="M:MistsOfTheGalaxyMenu.MenuItemOptional.#ctor(System.String,System.Boolean,System.Action{MistsOfTheGalaxyMenu.Interfaces.IMenuFunctionalityProvider})">
             <summary>
             Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuItemOptional"/> с функцией навигации
             </summary>
             <param name="name">Имя команды</param>
             <param name="isEnabled">Доступность команды</param>
             <param name="action">Действие команды</param>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuItemOptional.#ctor(System.String,System.Boolean,System.Action{MistsOfTheGalaxyMenu.MenuDecorator})">
-            <summary>
-            Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuItemOptional"/> с функцией управления темой меню 
-            </summary>
-            <param name="name">Имя команды</param>
-            <param name="isEnabled">Доступность команды</param>
-            <param name="action">Действие команды</param>
-        </member>
-        <member name="T:MistsOfTheGalaxyMenu.MenuNavigator">
-            <summary>
-            Класс навигации между страницами меню
-            </summary>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuNavigator.#ctor(MistsOfTheGalaxyMenu.Menu)">
-            <summary>
-            Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuNavigator"/>
-            </summary>
-            <param name="menu">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.Menu"/></param>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuNavigator.TurnToPreviousPage">
-            <summary>
-            Возврат на предыдущую страницу меню
-            </summary>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuNavigator.TurnToMainPage">
-            <summary>
-            Возврат на главную страницу меню
-            </summary>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuNavigator.CloseMenu">
-            <summary>
-            Завершение работы меню
-            </summary>
-        </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuNavigator.NavigateToNextPage(MistsOfTheGalaxyMenu.MenuPageItemList)">
-            <summary>
-            Переход к следующей странице меню
-            </summary>
-            <param name="menuPageItemList">Список команд следующей страницы меню</param>
         </member>
         <member name="T:MistsOfTheGalaxyMenu.MenuPage">
             <summary>
@@ -244,14 +287,13 @@
             Команда меню, отмеченная индикатором  
             </summary>
         </member>
-        <member name="M:MistsOfTheGalaxyMenu.MenuPage.#ctor(MistsOfTheGalaxyMenu.MenuPageItemList,MistsOfTheGalaxyMenu.MenuPageSettings,MistsOfTheGalaxyMenu.MenuNavigator,MistsOfTheGalaxyMenu.MenuDecorator)">
+        <member name="M:MistsOfTheGalaxyMenu.MenuPage.#ctor(MistsOfTheGalaxyMenu.MenuPageItemList,MistsOfTheGalaxyMenu.MenuPageSettings,MistsOfTheGalaxyMenu.MenuFunctionalityProvider)">
             <summary>
             Создание экземпляра <see cref="T:MistsOfTheGalaxyMenu.MenuPage"/>
             </summary>
             <param name="menuPageItemList">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.MenuPageItemList"/></param>
             <param name="menuPageSettings">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.MenuPageSettings"/></param>
-            <param name="navigator">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.MenuNavigator"/></param>
-            <param name="decorator">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.MenuDecorator"/></param>
+            <param name="menuFunctionalityProvider">Экземпляр класса <see cref="T:MistsOfTheGalaxyMenu.MenuFunctionalityProvider"/></param>
         </member>
         <member name="M:MistsOfTheGalaxyMenu.MenuPage.ActivateItem">
             <summary>

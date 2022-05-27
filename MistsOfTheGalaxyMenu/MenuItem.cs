@@ -9,6 +9,19 @@ namespace MistsOfTheGalaxyMenu
     public class MenuItem : IMenuItem
     {
         /// <summary>
+        /// Создание экземпляра <see cref="MenuItem"/> с функцией навигации
+        /// </summary>
+        /// <param name="name">Имя команды</param>
+        /// <param name="isEnabled">Доступность команды</param>
+        /// <param name="action">Действие команды</param>
+        public MenuItem(string name, bool isEnabled, Action<IMenuFunctionalityProvider> action)
+        {
+            Name = name;
+            IsEnabled = isEnabled;
+            NavigatorAction = action;
+        }
+
+        /// <summary>
         /// <inheritdoc cref="IMenuItem.Name"/>
         /// </summary>
         public string Name { get; }
@@ -21,37 +34,6 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// <inheritdoc cref="IMenuItem.NavigatorAction"/>
         /// </summary>
-        public Action<MenuNavigator> NavigatorAction { get; }
-
-        /// <summary>
-        /// <inheritdoc cref="IMenuItem.DecoratorAction"/>
-        /// </summary>
-        public Action<MenuDecorator> DecoratorAction { get; }
-
-        /// <summary>
-        /// Создание экземпляра <see cref="MenuItem"/> с функцией навигации
-        /// </summary>
-        /// <param name="name">Имя команды</param>
-        /// <param name="isEnabled">Доступность команды</param>
-        /// <param name="action">Действие команды</param>
-        public MenuItem(string name, bool isEnabled, Action<MenuNavigator> action)
-        {
-            Name = name;
-            IsEnabled = isEnabled;
-            NavigatorAction = action;
-        }
-
-        /// <summary>
-        /// Создание экземпляра <see cref="MenuItem"/> с функцией управления темой меню 
-        /// </summary>
-        /// <param name="name">Имя команды</param>
-        /// <param name="isEnabled">Доступность команды</param>
-        /// <param name="action">Действие команды</param>
-        public MenuItem(string name, bool isEnabled, Action<MenuDecorator> action)
-        {
-            Name = name;
-            IsEnabled = isEnabled;
-            DecoratorAction = action;
-        }
+        public Action<IMenuFunctionalityProvider> NavigatorAction { get; }
     }
 }

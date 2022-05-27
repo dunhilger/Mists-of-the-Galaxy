@@ -6,7 +6,7 @@ namespace MistsOfTheGalaxyMenu
 {
     class Program
     {
-        private static Action<MenuNavigator> _noAction = n => { };
+        private static Action<IMenuFunctionalityProvider> _noAction = n => { };
 
         static void Main(string[] args)
         {
@@ -26,7 +26,7 @@ namespace MistsOfTheGalaxyMenu
                 TextColor = ConsoleColor.White,
                 SelectedBackgroundColor = ConsoleColor.Gray
             };
-        
+
             var selectGameMode = new List<IMenuItem>
             {
                 new MenuItemOptional("Простой", true, _noAction),
@@ -61,7 +61,7 @@ namespace MistsOfTheGalaxyMenu
             var page_1 = new MenuPageItemList(mainMenuCommands);
 
             var menu = new Menu(page_1);
-            
+
             DisplayMenu(menu);
         }
 
@@ -70,39 +70,13 @@ namespace MistsOfTheGalaxyMenu
             //int menuPositionWidth = Console.WindowWidth / 2;
             //int menuPositionHeigth = Console.WindowHeight / 2;
             Console.CursorVisible = false;
-            
+            var menuBuilder = new ConsoleMenuBuilder(menu); 
+  
             while (true)
             {
-                menu.RenderMenuPage();
-                SwitchCommand(menu);             
+                menuBuilder.RenderMenuPage();
+                menuBuilder.ReadCommand();             
                 Console.Clear();
-            }
-        }
-
-        static void SwitchCommand(Menu menu)
-        {
-            ConsoleKeyInfo consoleKey = Console.ReadKey();
-
-            switch (consoleKey.Key)
-            {
-                case ConsoleKey.DownArrow:
-                case ConsoleKey.RightArrow:
-                case ConsoleKey.NumPad2:
-                case ConsoleKey.NumPad6:
-                    menu.NavigateDown();
-                    break;
-                case ConsoleKey.UpArrow:
-                case ConsoleKey.LeftArrow:
-                case ConsoleKey.NumPad8:
-                case ConsoleKey.NumPad4:  
-                    menu.NavigateUp();
-                    break;
-                case ConsoleKey.Enter:
-                    menu.ActivateItem();
-                    break;
-                case ConsoleKey.Backspace:
-                    menu.TurnToPreviousPage();
-                    break;
             }
         }
     }

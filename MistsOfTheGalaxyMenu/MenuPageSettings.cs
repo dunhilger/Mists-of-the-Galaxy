@@ -6,16 +6,6 @@
     public class MenuPageSettings
     {
         /// <summary>
-        /// Режим навигации
-        /// </summary>
-        public NavigationMode NavigationMode { get; set; } 
-
-        /// <summary>
-        /// Режим работы с неактивной командой меню
-        /// </summary>
-        public DisabledItemSelectionMode DisabledItemSelectionMode { get; set; }
-
-        /// <summary>
         /// Создание экземпляра <see cref="MenuPageSettings"/>
         /// </summary>
         /// <param name="navigationMode">Режим навигации меню</param>
@@ -25,5 +15,15 @@
             NavigationMode = navigationMode;
             DisabledItemSelectionMode = disabledItemSelectionMode;
         }
+
+        /// <summary>
+        /// Режим навигации
+        /// </summary>
+        public NavigationMode NavigationMode { get; set; } 
+
+        /// <summary>
+        /// Режим работы с неактивной командой меню
+        /// </summary>
+        public DisabledItemSelectionMode DisabledItemSelectionMode { get; set; }       
     }
 }

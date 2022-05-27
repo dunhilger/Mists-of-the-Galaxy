@@ -1,36 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using MistsOfTheGalaxyMenu.Interfaces;
+using System.Linq;
 
 namespace MistsOfTheGalaxyMenu
 {
     /// <summary>
-    /// Класс для создания меню/Класс типа меню
+    /// Класс для создания меню
     /// </summary>
     public class Menu
     {
-        /// <summary>
-        /// Тема меню
-        /// </summary>
-        public MenuTheme Theme 
+        private static List<MenuPageItemList> GetAllMenuPageItemLists(MenuPageItemList menuPage)
         {
-            get => _theme;
+            var result = new List<MenuPageItemList>() { menuPage };
+
+            if (menuPage.MenuItems?.Count > 0)
+            {
+                foreach (var menuItem in menuPage.MenuItems)
+                {
+                    var nextMenuPage = GetNextMenuPageItemList(menuItem);
+
+                    if (nextMenuPage != null)
+                    {
+                        var menuPages = GetAllMenuPageItemLists(nextMenuPage);
+
+                        if (menuPages?.Count > 0)
+                        {
+                            result.AddRange(menuPages);
+                        }
+                    }
+                }
+            }
+            return result;
         }
-        private MenuTheme _theme;
 
-        /// <summary>
-        /// Ширина страницы меню
-        /// </summary>
-        public int MenuWidth { get; private set; } 
+        private static MenuPageItemList GetNextMenuPageItemList(IMenuItem menuItem)
+        {
+            var navigatorParameters = new MenuNavigatorParameters();
+            var fakeNavigator = new FakeMenuFunctionalityProvider(navigatorParameters);
 
-        private MenuPage MenuPage => MenuPages.Peek();
+            navigatorParameters.MenuPageItemList = null;
+
+            menuItem.NavigatorAction?.Invoke(fakeNavigator);
+
+            if (navigatorParameters.MenuPageItemList != null)
+            {
+                return navigatorParameters.MenuPageItemList;
+            }
+
+            return null;
+        }
 
         private readonly MenuPageSettings _menuPageSettings;
 
-        private Stack<MenuPage> MenuPages { get; } = new Stack<MenuPage>();
-
-        private readonly MenuNavigator _navigator;
-
-        private readonly MenuDecorator _decorator;
+        private readonly MenuFunctionalityProvider _menuFunctionalityProvider;
 
         /// <summary>
         /// Создание экземпляра <see cref="Menu"/>
@@ -43,47 +66,49 @@ namespace MistsOfTheGalaxyMenu
 
             _menuPageSettings = new MenuPageSettings(Theme.NavigationMode, Theme.DisabledItemSelectionMode);
 
-            _navigator = new MenuNavigator(this);
+            _menuFunctionalityProvider = new MenuFunctionalityProvider(this);
 
-            _decorator = new MenuDecorator(this);
-
-            var menuPage = new MenuPage(menuPageItemList, _menuPageSettings, _navigator, _decorator);
+            var menuPage = new MenuPage(menuPageItemList, _menuPageSettings, _menuFunctionalityProvider);
 
             MenuPages.Push(menuPage);
 
-            MenuWidth = GetMenuWidth();
+            var allMenuPages = GetAllMenuPageItemLists(menuPageItemList);
+
+            MenuWidth = GetMenuWidth(allMenuPages);
         }
 
-        private int GetMenuWidth()
-        {
-            if (MenuPage.MenuItems.Count > 0)
-            {
-                int menuWidth = 0;
+        /// <summary>
+        /// Ширина страницы меню
+        /// </summary>
+        public int MenuWidth { get; }
 
-                for (int i = 0; i < MenuPage.MenuItems.Count; i++)
-                {
-                    if (menuWidth < MenuPage.MenuItems[i].Name.Length)
-                    {
-                        menuWidth = MenuPage.MenuItems[i].Name.Length;
-                    }
-                }
-                return menuWidth += Theme.Indent;
-            }
-            else return 0;
-        }
+        /// <summary>
+        /// Список команд страницы для чтения
+        /// </summary>
+        public IReadOnlyList<IMenuItem> MenuItems => _menuPage.MenuItems;
+
+        /// <summary>
+        /// Выеделнная курсором команда меню
+        /// </summary>
+        public IMenuItem SelectedMenuItem => _menuPage.SelectedMenuItem;
+
+        /// <summary>
+        /// Отмеченная индикатором команда меню
+        /// </summary>
+        public IMenuItem IndicatedMenuItem => _menuPage.IndicatedMenuItem;
 
         /// <summary>
         /// Активация команды, выделенной курсором 
         /// </summary>
         public void ActivateItem()
         {
-            MenuPage.ActivateItem();
+            _menuPage.ActivateItem();
         }
 
         /// <summary>
         /// Завершение работы меню
         /// </summary>
-        public static void CloseMenu()
+        public void CloseMenu()
         {
             Environment.Exit(0);
         }
@@ -110,7 +135,7 @@ namespace MistsOfTheGalaxyMenu
         /// <param name="menuPageItemList">Список команд следующей страницы меню</param>
         public void NavigateToNextPage(MenuPageItemList menuPageItemList)
         {
-            MenuPages.Push(new MenuPage(menuPageItemList, _menuPageSettings, _navigator, _decorator));
+            MenuPages.Push(new MenuPage(menuPageItemList, _menuPageSettings, _menuFunctionalityProvider));
         }
 
         /// <summary>
@@ -121,7 +146,7 @@ namespace MistsOfTheGalaxyMenu
             if (MenuPages.Count > 1)
             {
                 MenuPages.Pop();
-            }                    
+            }
         }
 
         /// <summary>
@@ -140,7 +165,7 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void NavigateUp()
         {
-            MenuPage.NavigateUp();
+            _menuPage.NavigateUp();
         }
 
         /// <summary>
@@ -148,106 +173,25 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void NavigateDown()
         {
-            MenuPage.NavigateDown();
+            _menuPage.NavigateDown();
         }
 
         /// <summary>
-        /// Построение страниц меню
+        /// Тема меню
         /// </summary>
-        public void RenderMenuPage()
+        public MenuTheme Theme 
         {
-            if (MenuPage.MenuItems.Count > 0)
-            {
-                MenuWidth = GetMenuWidth();
-
-                String line = new(Theme.HorisontalLineElement, MenuWidth);
-                SetFrameColor();
-                Console.WriteLine($"{Theme.LeftUpperCorner}{line}{Theme.RightUpperCorner}");
-
-                for (int i = 0; i < MenuPage.MenuItems.Count; i++)
-                {
-                    int diff = line.Length - MenuPage.MenuItems[i].Name.Length;
-
-                    if (MenuPage.IndicatedMenuItem != null && MenuPage.MenuItems[i] == MenuPage.IndicatedMenuItem)
-                    {
-                        diff = line.Length - (MenuPage.IndicatedMenuItem.Name.Length + Theme.IndicatorActivatedMenuItem.ToString().Length);
-                    }
-
-                    String leftShift = new(' ', diff / 2);
-                    String rightShift = new(' ', diff - leftShift.Length);
-
-                    Console.Write($"{Theme.VerticalLineElement}");
-                    
-                    if (MenuPage.MenuItems[i].IsEnabled)
-                    {
-                        if (MenuPage.SelectedMenuItem == MenuPage.MenuItems[i]) 
-                            SetSelectedItemColors();
-                        else
-                            SetNormalItemColors();
-                    }
-                    else
-                    {
-                        if (MenuPage.SelectedMenuItem == MenuPage.MenuItems[i]) 
-                            SetSelectedDisabledItemColors();
-                        else
-                            SetDisabledItemColors();
-                    }
-
-                    Console.Write($"{leftShift}");
-
-                    if (MenuPage.MenuItems[i] == MenuPage.IndicatedMenuItem)
-                    {
-                        Console.Write($"{MenuPage.IndicatedMenuItem?.Name}{Theme.IndicatorActivatedMenuItem}");
-                    }
-                    else
-                    {
-                        Console.Write($"{MenuPage.MenuItems[i].Name}");
-                    }
-
-                    Console.Write($"{rightShift}");
-
-                    ResetColorMenuItem();
-                    SetFrameColor();
-                    Console.WriteLine($"{Theme.VerticalLineElement}");
-
-                    if (i < MenuPage.MenuItems.Count - 1)
-                    {
-                        Console.WriteLine($"{Theme.LeftInnerCorner}{line}{Theme.RightInnerCorner}");
-                    }
-                }
-                Console.WriteLine($"{Theme.LeftBottomCorner}{line}{Theme.RightBottomCorner}");
-            }
-            else
-            {
-                Console.WriteLine("no menu");
-            }
+            get => _theme;
         }
+        private MenuTheme _theme;
 
-        private void SetSelectedItemColors()
+        private MenuPage _menuPage => MenuPages.Peek();
+
+        private Stack<MenuPage> MenuPages { get; } = new Stack<MenuPage>();
+      
+        private int GetMenuWidth(List<MenuPageItemList> allMenuPages)
         {
-            Console.ForegroundColor = Theme.SelectedTextColor;
-            Console.BackgroundColor = Theme.SelectedBackgroundColor;
+            return allMenuPages.SelectMany(i => i.MenuItems).Max(i => i.Name.Length) + Theme.Indent;
         }
-
-        private void SetDisabledItemColors()
-        {
-            Console.BackgroundColor = Theme.DisabledBackgroundColor;
-            Console.ForegroundColor = Theme.DisabledTextColor;
-        }
-
-        private void SetNormalItemColors()
-        {
-            Console.ForegroundColor = Theme.TextColor;
-            Console.BackgroundColor = Theme.BackgroundColor;
-        }
-
-        private void SetSelectedDisabledItemColors()
-        {
-            Console.ForegroundColor = Theme.SelectedDisabledTextColor;
-            Console.BackgroundColor = Theme.SelectedDisabledBackgroundColor;
-        }
-        private void SetFrameColor() => Console.ForegroundColor = Theme.FrameColor;
-
-        private void ResetColorMenuItem() => Console.ResetColor();
     }
 }

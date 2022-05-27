@@ -13,7 +13,7 @@ namespace MenuUnitTests
         {
             get
             {
-                Action<MenuNavigator> _noAction = n => { };
+                Action<IMenuFunctionalityProvider> _noAction = n => { };
 
                 yield return new TestCaseData(new List<IMenuItem> { }, 0);
                 yield return new TestCaseData(new List<IMenuItem> { new MenuItem("a", false, _noAction) }, 7);
@@ -44,7 +44,7 @@ namespace MenuUnitTests
         {
             get
             {
-                Action<MenuNavigator> _noAction = n => { };
+                Action<IMenuFunctionalityProvider> _noAction = n => { };
 
                 yield return new TestCaseData(new List<IMenuItem> { }, 0);
                 yield return new TestCaseData(new List<IMenuItem> { new MenuItem("a", false, _noAction) }, 1);

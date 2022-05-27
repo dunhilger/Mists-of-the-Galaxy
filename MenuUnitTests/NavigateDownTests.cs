@@ -25,7 +25,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(navigationMode, disabledItemSelectionMode);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             menuPage.NavigateDown();
 
@@ -42,7 +42,7 @@ namespace MenuUnitTests
             DisabledItemSelectionMode disabledItemSelectionMode,
             NavigationMode navigationMode)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { new MenuItem("a", true, _noAction) };
 
@@ -50,7 +50,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(navigationMode, disabledItemSelectionMode);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             menuPage.NavigateDown();
 
@@ -63,7 +63,7 @@ namespace MenuUnitTests
         [Test]
         public void Check_Select_Mode_OneDisabledMenuItem(NavigationMode navigationMode)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { new MenuItem("a", false, _noAction) };
 
@@ -71,7 +71,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(navigationMode, DisabledItemSelectionMode.Select);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             menuPage.NavigateDown();
 
@@ -84,7 +84,7 @@ namespace MenuUnitTests
         [Test]
         public void Check_Skip_Mode_OneDisabledMenuItem(NavigationMode navigationMode)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { new MenuItem("a", false, _noAction) };
 
@@ -92,7 +92,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(navigationMode, DisabledItemSelectionMode.Skip);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             menuPage.NavigateDown();
 
@@ -106,7 +106,7 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOn_Select_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { };
 
@@ -119,7 +119,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOn, DisabledItemSelectionMode.Select);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
@@ -143,7 +143,7 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOff_Select_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { };
 
@@ -156,7 +156,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOff, DisabledItemSelectionMode.Select);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
@@ -180,7 +180,7 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOn_Skip_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { };
 
@@ -193,7 +193,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOn, DisabledItemSelectionMode.Skip);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
@@ -217,7 +217,7 @@ namespace MenuUnitTests
         [Test]
         public void Check_LoopOff_Skip_Mode_MenuItemList(int[] enableFlags, int moveCounter, int? selectedIndex)
         {
-            Action<MenuNavigator> _noAction = n => { };
+            Action<IMenuFunctionalityProvider> _noAction = n => { };
 
             var menuItems = new List<IMenuItem> { };
 
@@ -230,7 +230,7 @@ namespace MenuUnitTests
 
             var menuPageSettings = new MenuPageSettings(NavigationMode.LoopOff, DisabledItemSelectionMode.Skip);
 
-            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null, null);
+            var menuPage = new MenuPage(menuPageItemList, menuPageSettings, null);
 
             for (int i = 0; i < moveCounter; i++)
             {
