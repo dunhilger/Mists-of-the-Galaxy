@@ -36,7 +36,7 @@
 
 #### Создание страниц
 
-Для создания страницы нужно ввести и инициализировать переменную типа List<IMenuItem>, которая будет хранить список команд. Так, например, создадим первую страницу меню. Список команд следующий:
+Для создания страницы нужно ввести и инициализировать переменную типа List\<IMenuItem\>, которая будет хранить список команд. Так, например, создадим первую страницу меню. Список команд следующий:
  
     var mainMenuCommands = new List<IMenuItem>
             {
@@ -46,6 +46,36 @@
                 new MenuItem("Выход", true, n => n.CloseMenu()),
             };
  
- Затем инициализируем переменную типа MenuPageItemList, и в качестве параметра передадим список команд, созданный выше:
+ Затем инициализируем переменную page_1 типа MenuPageItemList, и в качестве параметра передадим список команд, созданный выше:
  
     var page_1 = new MenuPageItemList(mainMenuCommands);
+ 
+ Аналогично будет создана страница 2:
+ 
+    var mainSettings = new List<IMenuItem>
+            {
+                new MenuItem("Уровень сложности", true, n => n.NavigateToNextPage(page_3)),
+                new MenuItem("Тема", true, n => n.NavigateToNextPage(page_4)),
+            };
+            var page_2 = new MenuPageItemList(mainSettings);
+ 
+ Страница 3:
+ 
+    var selectGameMode = new List<IMenuItem>
+            {
+                new MenuItemOptional("Простой", true, _noAction),
+                new MenuItemOptional("Средний", true, _noAction),
+                new MenuItemOptional("Сложный", true, _noAction),
+                new MenuItem("Назад", true, n => n.TurnToPreviousPage()),
+            };
+            var page_3 = new MenuPageItemList(selectGameMode);
+ 
+ Страница 4:
+ 
+    var selectMenuTheme = new List<IMenuItem>
+            {
+                new MenuItemOptional("Светлая", true, d => d.SetTheme(lightTheme)),
+                new MenuItemOptional("Темная", true, d => d.SetTheme(darkTheme)),
+                new MenuItem("На главную", true, n => n.TurnToMainPage()),
+            };
+            var page_4 = new MenuPageItemList(selectMenuTheme);
