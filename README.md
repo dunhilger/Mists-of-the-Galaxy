@@ -122,11 +122,25 @@
 * Backspace - возврат на предыдущую страницу
 * Enter - активация команды меню, обозначенной курсором
 
-#### Выбор режима работы курсора меню
+#### Создание темы меню
 
-Меню поддерживает два режима навигации курсора:
+На странице 4 меню предложены 2 темы: lightTheme и darkTheme. Для создания своей темы нужно объявить переменную, например, myTheme типа 
+MenuTheme и задать значения для свойств объекта темы:
 
-* Циклический
-* Нециклический
+    var myTheme = new MenuTheme()
+            {
+                FrameColor = ConsoleColor.White,
+                // Цвет рамки
+                BackgroundColor = ConsoleColor.White,
+                // Цвет фона
+                TextColor = ConsoleColor.Black,
+                // Цвет шрифта
+                SelectedTextColor = ConsoleColor.DarkGreen,
+                // Цвет шрифта выбранной курсором команды 
+                DisabledBackgroundColor = ConsoleColor.White,
+                // Цвет фона недоступной команды
+                DisabledTextColor = ConsoleColor.Gray
+                // Цвет шрифта недоступной команды
+            };
 
 
