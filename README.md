@@ -129,18 +129,22 @@ MenuTheme и задать значения для свойств объекта 
 
     var myTheme = new MenuTheme()
             {
-                FrameColor = ConsoleColor.White,
                 // Цвет рамки
-                BackgroundColor = ConsoleColor.White,
-                // Цвет фона
-                TextColor = ConsoleColor.Black,
+                FrameColor = ConsoleColor.DarkGreen,
                 // Цвет шрифта
-                SelectedTextColor = ConsoleColor.DarkGreen,
-                // Цвет шрифта выбранной курсором команды 
-                DisabledBackgroundColor = ConsoleColor.White,
+                TextColor = ConsoleColor.Blue,
+                // Цвет курсора
+                CursorColor = ConsoleColor.DarkRed,
                 // Цвет фона недоступной команды
-                DisabledTextColor = ConsoleColor.Gray
+                DisabledBackgroundColor = ConsoleColor.White,
                 // Цвет шрифта недоступной команды
+                DisabledTextColor = ConsoleColor.Magenta
+                
             };
+            
+Полученная стилизация:
+            
+![image](https://user-images.githubusercontent.com/55708187/229156835-f4900749-9bd7-455a-a09e-3a95f53f0c2a.png)
+
 
 
