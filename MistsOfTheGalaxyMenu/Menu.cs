@@ -1,32 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
-using MistsOfTheGalaxyMenu.Interfaces;
+using MenuStucture.Interfaces;
 using System.Linq;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
+    /// <summary>
+    /// Перечисление режимов работы курсора с неактивной командой меню
+    /// </summary>
+    public enum DisabledItemSelectionMode : byte
+    {
+        /// <summary>
+        /// Режим пропуска
+        /// </summary>
+        Skip = 0,
+
+        /// <summary>
+        /// Режим выделения
+        /// </summary>
+        Select = 1
+    }
+
+    /// <summary>
+    /// Перечисление режимов работы навигации курсора
+    /// </summary>
+    public enum NavigationMode : byte
+    {
+        /// <summary>
+        /// Нециклический
+        /// </summary>
+        LoopOn = 0,
+
+        /// <summary>
+        /// Циклический
+        /// </summary>
+        LoopOff = 1
+    }
+
     /// <summary>
     /// Класс для создания меню
     /// </summary>
     public class Menu
     {
-        private static List<MenuPageItemList> GetAllMenuPageItemLists(MenuPageItemList menuPage)
+        private static List<MenuPageItemList> GetAllMenuPageItemLists(MenuPageItemList MenuPage)
         {
-            var result = new List<MenuPageItemList>() { menuPage };
+            var result = new List<MenuPageItemList>() { MenuPage };
 
-            if (menuPage.MenuItems?.Count > 0)
+            if (MenuPage.MenuItems?.Count > 0)
             {
-                foreach (var menuItem in menuPage.MenuItems)
+                foreach (var MenuItem in MenuPage.MenuItems)
                 {
-                    var nextMenuPage = GetNextMenuPageItemList(menuItem);
+                    var nextMenuPage = GetNextMenuPageItemList(MenuItem);
 
                     if (nextMenuPage != null)
                     {
-                        var menuPages = GetAllMenuPageItemLists(nextMenuPage);
+                        var MenuPages = GetAllMenuPageItemLists(nextMenuPage);
 
-                        if (menuPages?.Count > 0)
+                        if (MenuPages?.Count > 0)
                         {
-                            result.AddRange(menuPages);
+                            result.AddRange(MenuPages);
                         }
                     }
                 }
@@ -34,14 +66,14 @@ namespace MistsOfTheGalaxyMenu
             return result;
         }
 
-        private static MenuPageItemList GetNextMenuPageItemList(IMenuItem menuItem)
+        private static MenuPageItemList GetNextMenuPageItemList(IMenuItem MenuItem)
         {
             var navigatorParameters = new MenuNavigatorParameters();
             var fakeNavigator = new FakeMenuFunctionalityProvider(navigatorParameters);
 
             navigatorParameters.MenuPageItemList = null;
 
-            menuItem.NavigatorAction?.Invoke(fakeNavigator);
+            MenuItem.NavigatorAction?.Invoke(fakeNavigator);
 
             if (navigatorParameters.MenuPageItemList != null)
             {
@@ -51,28 +83,57 @@ namespace MistsOfTheGalaxyMenu
             return null;
         }
 
-        private readonly MenuPageSettings _menuPageSettings;
+        private readonly MenuPageSettings _menuPageSettings = new(NavigationMode.LoopOff, DisabledItemSelectionMode.Select);
 
-        private readonly MenuFunctionalityProvider _menuFunctionalityProvider;
+
+        private readonly MenuFunctionalityProvider _MenuFunctionalityProvider;
+
+        /// <summary>
+        /// Режим навигации курсора
+        /// </summary>
+        public NavigationMode NavigationMode
+        {
+            get
+            {
+                return _menuPageSettings.NavigationMode;
+            }
+            set
+            {
+                _menuPageSettings.NavigationMode = value;
+            }
+        }
+
+        /// <summary>
+        /// Режим работы курсора с неактивной командой меню
+        /// </summary>
+        public DisabledItemSelectionMode DisabledItemSelectionMode 
+        {
+            get
+            {
+                return _menuPageSettings.DisabledItemSelectionMode;
+            }
+            set
+            {
+                _menuPageSettings.DisabledItemSelectionMode = value;
+            }
+        }
 
         /// <summary>
         /// Создание экземпляра <see cref="Menu"/>
         /// </summary>
-        /// <param name="menuPageItemList">Список команд страницы меню</param>
-        /// <param name="menuTheme">Тема меню</param>
-        public Menu(MenuPageItemList menuPageItemList, MenuTheme menuTheme = null)
+        /// <param name="MenuPageItemList">Список команд страницы меню</param>
+        /// <param name="MenuTheme">Тема меню</param>
+        public Menu(MenuPageItemList MenuPageItemList, MenuTheme MenuTheme = null)
         {
-            _theme = menuTheme ?? new MenuTheme();
+            _theme = MenuTheme ?? new MenuTheme();
 
-            _menuPageSettings = new MenuPageSettings(Theme.NavigationMode, Theme.DisabledItemSelectionMode);
+            _MenuFunctionalityProvider = new MenuFunctionalityProvider(this);
 
-            _menuFunctionalityProvider = new MenuFunctionalityProvider(this);
+            var MenuPage = new MenuPage(MenuPageItemList, _menuPageSettings, _MenuFunctionalityProvider);
 
-            var menuPage = new MenuPage(menuPageItemList, _menuPageSettings, _menuFunctionalityProvider);
+            MenuPages.Push(MenuPage);
 
-            MenuPages.Push(menuPage);
-
-            var allMenuPages = GetAllMenuPageItemLists(menuPageItemList);
+            var allMenuPages = GetAllMenuPageItemLists(MenuPageItemList);
 
             MenuWidth = GetMenuWidth(allMenuPages);
         }
@@ -85,24 +146,24 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// Список команд страницы для чтения
         /// </summary>
-        public IReadOnlyList<IMenuItem> MenuItems => _menuPage.MenuItems;
+        public IReadOnlyList<IMenuItem> MenuItems => MenuPage.MenuItems;
 
         /// <summary>
         /// Выеделнная курсором команда меню
         /// </summary>
-        public IMenuItem SelectedMenuItem => _menuPage.SelectedMenuItem;
+        public IMenuItem SelectedMenuItem => MenuPage.SelectedMenuItem;
 
         /// <summary>
         /// Отмеченная индикатором команда меню
         /// </summary>
-        public IMenuItem IndicatedMenuItem => _menuPage.IndicatedMenuItem;
+        public IMenuItem IndicatedMenuItem => MenuPage.IndicatedMenuItem;
 
         /// <summary>
         /// Активация команды, выделенной курсором 
         /// </summary>
         public void ActivateItem()
         {
-            _menuPage.ActivateItem();
+            MenuPage.ActivateItem();
         }
 
         /// <summary>
@@ -132,10 +193,10 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// Создание и переход к следующей странице меню
         /// </summary>
-        /// <param name="menuPageItemList">Список команд следующей страницы меню</param>
-        public void NavigateToNextPage(MenuPageItemList menuPageItemList)
+        /// <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        public void NavigateToNextPage(MenuPageItemList MenuPageItemList)
         {
-            MenuPages.Push(new MenuPage(menuPageItemList, _menuPageSettings, _menuFunctionalityProvider));
+            MenuPages.Push(new MenuPage(MenuPageItemList, _menuPageSettings, _MenuFunctionalityProvider));
         }
 
         /// <summary>
@@ -165,7 +226,7 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void NavigateUp()
         {
-            _menuPage.NavigateUp();
+            MenuPage.NavigateUp();
         }
 
         /// <summary>
@@ -173,7 +234,7 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void NavigateDown()
         {
-            _menuPage.NavigateDown();
+            MenuPage.NavigateDown();
         }
 
         /// <summary>
@@ -185,7 +246,7 @@ namespace MistsOfTheGalaxyMenu
         }
         private MenuTheme _theme;
 
-        private MenuPage _menuPage => MenuPages.Peek();
+        private MenuPage MenuPage => MenuPages.Peek();
 
         private Stack<MenuPage> MenuPages { get; } = new Stack<MenuPage>();
       

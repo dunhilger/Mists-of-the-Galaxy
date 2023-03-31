@@ -1,6 +1,6 @@
-﻿using MistsOfTheGalaxyMenu.Interfaces;
+﻿using MenuStucture.Interfaces;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
     /// <summary>
     /// Класс - поставщик функционала меню
@@ -10,10 +10,10 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// Создание экземпляра <see cref="MenuFunctionalityProvider"/>
         /// </summary>
-        /// <param name="menu">Экземпляр класса <see cref="Menu"/></param>
-        public MenuFunctionalityProvider(Menu menu)
+        /// <param name="Menu">Экземпляр класса <see cref="Menu"/></param>
+        public MenuFunctionalityProvider(Menu Menu)
         {
-            _menu = menu;
+            _Menu = Menu;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void TurnToPreviousPage()
         {
-            _menu.TurnToPreviousPage();
+            _Menu.TurnToPreviousPage();
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void TurnToMainPage()
         {
-            _menu.TurnToMainPage();
+            _Menu.TurnToMainPage();
         }
 
         /// <summary>
@@ -37,16 +37,16 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void CloseMenu()
         {
-            _menu.CloseMenu();
+            _Menu.CloseMenu();
         }
 
         /// <summary>
         /// <inheritdoc cref="IMenuFunctionalityProvider.NavigateToNextPage(MenuPageItemList)"/>
         /// </summary>
-        /// <param name="menuPageItemList">Список команд следующей страницы меню</param>
-        public void NavigateToNextPage(MenuPageItemList menuPageItemList)
+        /// <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        public void NavigateToNextPage(MenuPageItemList MenuPageItemList)
         {
-            _menu.NavigateToNextPage(menuPageItemList);  
+            _Menu.NavigateToNextPage(MenuPageItemList);  
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace MistsOfTheGalaxyMenu
         /// <param name="theme">Тема меню</param>
         public void SetTheme(MenuTheme theme)
         {
-            _menu.SetTheme(theme);
+            _Menu.SetTheme(theme);
         }
 
-        private readonly Menu _menu;
+        private readonly Menu _Menu;
     }
 }

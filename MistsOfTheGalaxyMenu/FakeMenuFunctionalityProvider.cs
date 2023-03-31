@@ -1,23 +1,23 @@
-﻿using MistsOfTheGalaxyMenu.Interfaces;
+﻿using MenuStucture.Interfaces;
 using System;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
     /// <summary>
     /// Ложный класс - поставщик функционала меню
     /// </summary>
     public class FakeMenuFunctionalityProvider : IMenuFunctionalityProvider
     {
-        private readonly MenuNavigatorParameters _menuNavigatorParameters;
+        private readonly MenuNavigatorParameters _MenuNavigatorParameters;
 
         /// <summary>
         /// Создание экземпляра <see cref="FakeMenuFunctionalityProvider"/>
         /// </summary>
-        /// <param name="menuNavigatorParameters">Параметры навигации меню</param>
+        /// <param name="MenuNavigatorParameters">Параметры навигации меню</param>
 
-        public FakeMenuFunctionalityProvider(MenuNavigatorParameters menuNavigatorParameters)
+        public FakeMenuFunctionalityProvider(MenuNavigatorParameters MenuNavigatorParameters)
         {
-            _menuNavigatorParameters = menuNavigatorParameters;
+            _MenuNavigatorParameters = MenuNavigatorParameters;
         }
 
         /// <summary>
@@ -31,10 +31,10 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// <inheritdoc cref="IMenuFunctionalityProvider.NavigateToNextPage(MenuPageItemList)"/>
         /// </summary>
-        /// <param name="menuPageItemList">Список команд следующей страницы меню</param>
-        public void NavigateToNextPage(MenuPageItemList menuPageItemList)
+        /// <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        public void NavigateToNextPage(MenuPageItemList MenuPageItemList)
         {
-            _menuNavigatorParameters.MenuPageItemList = menuPageItemList;
+            _MenuNavigatorParameters.MenuPageItemList = MenuPageItemList;
         }
 
         /// <summary>

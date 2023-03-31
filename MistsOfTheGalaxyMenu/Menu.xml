@@ -1,0 +1,528 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MenuStructure</name>
+    </assembly>
+    <members>
+        <member name="T:MenuStucture.ConsoleMenuBuilder">
+            <summary>
+            Класс для построения меню в консоли
+            </summary>
+        </member>
+        <member name="M:MenuStucture.ConsoleMenuBuilder.#ctor(MenuStucture.Menu)">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.ConsoleMenuBuilder"/>
+            </summary>
+            <param name="Menu">Объект меню</param>
+        </member>
+        <member name="M:MenuStucture.ConsoleMenuBuilder.RenderMenuPage">
+            <summary>
+            Отрисовка страниц меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.ConsoleMenuBuilder.ReadCommand">
+            <summary>
+            Распознает команды клавиатуры
+            </summary>
+        </member>
+        <member name="T:MenuStucture.FakeMenuFunctionalityProvider">
+            <summary>
+            Ложный класс - поставщик функционала меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.FakeMenuFunctionalityProvider.#ctor(MenuStucture.MenuNavigatorParameters)">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.FakeMenuFunctionalityProvider"/>
+            </summary>
+            <param name="MenuNavigatorParameters">Параметры навигации меню</param>
+        </member>
+        <member name="M:MenuStucture.FakeMenuFunctionalityProvider.CloseMenu">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.CloseMenu"/>
+            </summary>
+        </member>
+        <member name="M:MenuStucture.FakeMenuFunctionalityProvider.NavigateToNextPage(MenuStucture.MenuPageItemList)">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.NavigateToNextPage(MenuStucture.MenuPageItemList)"/>
+            </summary>
+            <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MenuStucture.FakeMenuFunctionalityProvider.SetTheme(MenuStucture.MenuTheme)">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.SetTheme(MenuStucture.MenuTheme)"/>
+            </summary>
+            <param name="theme">Тема меню.</param>
+        </member>
+        <member name="M:MenuStucture.FakeMenuFunctionalityProvider.TurnToMainPage">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.TurnToMainPage"/>
+            </summary>
+        </member>
+        <member name="M:MenuStucture.FakeMenuFunctionalityProvider.TurnToPreviousPage">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.TurnToPreviousPage"/>
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuNavigatorParameters">
+            <summary>
+            Класс для хранения параметров навигации меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuNavigatorParameters.MenuPageItemList">
+            <summary>
+            Список команд страницы
+            </summary>
+        </member>
+        <member name="T:MenuStucture.Interfaces.IMenuFunctionalityProvider">
+            <summary>
+            Интерфейс класса - поставщика функционала меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.TurnToPreviousPage">
+            <summary>
+            Возврат на предыдущую страницу меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.TurnToMainPage">
+            <summary>
+            Возврат на главную страницу меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.CloseMenu">
+            <summary>
+            Завершение работы меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.NavigateToNextPage(MenuStucture.MenuPageItemList)">
+            <summary>
+            Переход к следующей странице меню
+            </summary>
+            <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.SetTheme(MenuStucture.MenuTheme)">
+            <summary>
+            Устанавливает тему меню.
+            </summary>
+            <param name="theme">Тема меню.</param>
+        </member>
+        <member name="T:MenuStucture.Interfaces.IMenuItem">
+            <summary>
+            Интерфейс команды меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Interfaces.IMenuItem.Name">
+            <summary>
+            Имя команды меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Interfaces.IMenuItem.IsEnabled">
+            <summary>
+            Свойство доступности команды меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Interfaces.IMenuItem.NavigatorAction">
+            <summary>
+            Действие навигационного типа
+            </summary>
+        </member>
+        <member name="T:MenuStucture.DisabledItemSelectionMode">
+            <summary>
+            Перечисление режимов работы курсора с неактивной командой меню
+            </summary>
+        </member>
+        <member name="F:MenuStucture.DisabledItemSelectionMode.Skip">
+            <summary>
+            Режим пропуска
+            </summary>
+        </member>
+        <member name="F:MenuStucture.DisabledItemSelectionMode.Select">
+            <summary>
+            Режим выделения
+            </summary>
+        </member>
+        <member name="T:MenuStucture.NavigationMode">
+            <summary>
+            Перечисление режимов работы навигации курсора
+            </summary>
+        </member>
+        <member name="F:MenuStucture.NavigationMode.LoopOn">
+            <summary>
+            Нециклический
+            </summary>
+        </member>
+        <member name="F:MenuStucture.NavigationMode.LoopOff">
+            <summary>
+            Циклический
+            </summary>
+        </member>
+        <member name="T:MenuStucture.Menu">
+            <summary>
+            Класс для создания меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Menu.NavigationMode">
+            <summary>
+            Режим навигации курсора
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Menu.DisabledItemSelectionMode">
+            <summary>
+            Режим работы курсора с неактивной командой меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.#ctor(MenuStucture.MenuPageItemList,MenuStucture.MenuTheme)">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.Menu"/>
+            </summary>
+            <param name="MenuPageItemList">Список команд страницы меню</param>
+            <param name="MenuTheme">Тема меню</param>
+        </member>
+        <member name="P:MenuStucture.Menu.MenuWidth">
+            <summary>
+            Ширина страницы меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Menu.MenuItems">
+            <summary>
+            Список команд страницы для чтения
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Menu.SelectedMenuItem">
+            <summary>
+            Выеделнная курсором команда меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Menu.IndicatedMenuItem">
+            <summary>
+            Отмеченная индикатором команда меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.ActivateItem">
+            <summary>
+            Активация команды, выделенной курсором 
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.CloseMenu">
+            <summary>
+            Завершение работы меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.SetTheme(MenuStucture.MenuTheme)">
+            <summary>
+            Устанавливает тему меню
+            </summary>
+            <param name="theme">Тема меню</param>
+        </member>
+        <member name="M:MenuStucture.Menu.NavigateToNextPage(MenuStucture.MenuPageItemList)">
+            <summary>
+            Создание и переход к следующей странице меню
+            </summary>
+            <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MenuStucture.Menu.TurnToPreviousPage">
+            <summary>
+            Возврат на предыдущую страницу меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.TurnToMainPage">
+            <summary>
+            Возврат на главную страницу меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.NavigateUp">
+            <summary>
+            Навигация по странице вверх
+            </summary>
+        </member>
+        <member name="M:MenuStucture.Menu.NavigateDown">
+            <summary>
+            Навигация по странице вниз
+            </summary>
+        </member>
+        <member name="P:MenuStucture.Menu.Theme">
+            <summary>
+            Тема меню
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuFunctionalityProvider">
+            <summary>
+            Класс - поставщик функционала меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuFunctionalityProvider.#ctor(MenuStucture.Menu)">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.MenuFunctionalityProvider"/>
+            </summary>
+            <param name="Menu">Экземпляр класса <see cref="T:MenuStucture.Menu"/></param>
+        </member>
+        <member name="M:MenuStucture.MenuFunctionalityProvider.TurnToPreviousPage">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.TurnToPreviousPage"/>
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuFunctionalityProvider.TurnToMainPage">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.TurnToMainPage"/>
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuFunctionalityProvider.CloseMenu">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.CloseMenu"/>
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuFunctionalityProvider.NavigateToNextPage(MenuStucture.MenuPageItemList)">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.NavigateToNextPage(MenuStucture.MenuPageItemList)"/>
+            </summary>
+            <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        </member>
+        <member name="M:MenuStucture.MenuFunctionalityProvider.SetTheme(MenuStucture.MenuTheme)">
+            <summary>
+            <inheritdoc cref="M:MenuStucture.Interfaces.IMenuFunctionalityProvider.SetTheme(MenuStucture.MenuTheme)"/>
+            </summary>
+            <param name="theme">Тема меню</param>
+        </member>
+        <member name="T:MenuStucture.MenuItem">
+            <summary>
+            Класс для создания команды меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuItem.#ctor(System.String,System.Boolean,System.Action{MenuStucture.Interfaces.IMenuFunctionalityProvider})">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.MenuItem"/> с функцией навигации
+            </summary>
+            <param name="name">Имя команды</param>
+            <param name="isEnabled">Доступность команды</param>
+            <param name="action">Действие команды</param>
+        </member>
+        <member name="P:MenuStucture.MenuItem.Name">
+            <summary>
+            <inheritdoc cref="P:MenuStucture.Interfaces.IMenuItem.Name"/>
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuItem.IsEnabled">
+            <summary>
+            <inheritdoc cref="P:MenuStucture.Interfaces.IMenuItem.IsEnabled"/>
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuItem.NavigatorAction">
+            <summary>
+            <inheritdoc cref="P:MenuStucture.Interfaces.IMenuItem.NavigatorAction"/>
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuItemOptional">
+            <summary>
+            Класс для создания опциональной команды меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuItemOptional.#ctor(System.String,System.Boolean,System.Action{MenuStucture.Interfaces.IMenuFunctionalityProvider})">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.MenuItemOptional"/> с функцией навигации
+            </summary>
+            <param name="name">Имя команды</param>
+            <param name="isEnabled">Доступность команды</param>
+            <param name="action">Действие команды</param>
+        </member>
+        <member name="P:MenuStucture.MenuItemOptional.Name">
+            <summary>
+            <inheritdoc cref="P:MenuStucture.Interfaces.IMenuItem.Name"/>
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuItemOptional.IsEnabled">
+            <summary>
+            <inheritdoc cref="P:MenuStucture.Interfaces.IMenuItem.IsEnabled"/>
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuItemOptional.NavigatorAction">
+            <summary>
+            <inheritdoc cref="P:MenuStucture.Interfaces.IMenuItem.NavigatorAction"/>
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuPage">
+            <summary>
+            Класс создания страницы меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuPage.#ctor(MenuStucture.MenuPageItemList,MenuStucture.MenuPageSettings,MenuStucture.MenuFunctionalityProvider)">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.MenuPage"/>
+            </summary>
+            <param name="MenuPageItemList">Экземпляр класса <see cref="T:MenuStucture.MenuPageItemList"/></param>
+            <param name="MenuPageSettings">Экземпляр класса <see cref="T:MenuStucture.MenuPageSettings"/></param>
+            <param name="MenuFunctionalityProvider">Экземпляр класса <see cref="T:MenuStucture.MenuFunctionalityProvider"/></param>
+        </member>
+        <member name="P:MenuStucture.MenuPage.MenuItems">
+            <summary>
+            Список команд страницы
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuPage.SelectedMenuItem">
+            <summary>
+            Команда меню, выделенная курсором 
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuPage.IndicatedMenuItem">
+            <summary>
+            Команда меню, отмеченная индикатором  
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuPage.NavigateUp">
+            <summary>
+            Навигация по странице вверх
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuPage.NavigateDown">
+            <summary>
+            Навигация по странице вниз
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuPage.ActivateItem">
+            <summary>
+            Активация команды, выделенной курсором 
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuPageItemList">
+            <summary>
+            Класс для создания списка команд страницы меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuPageItemList.#ctor(System.Collections.Generic.List{MenuStucture.Interfaces.IMenuItem})">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.MenuPageItemList"/>
+            </summary>
+            <param name="MenuItems">Список команд страницы меню</param>
+        </member>
+        <member name="P:MenuStucture.MenuPageItemList.MenuItems">
+            <summary>
+            Список команд страницы меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuPageItemList.IsIndicate">
+            <summary>
+            Команда меню, отмеченная индикатором 
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuPageSettings">
+            <summary>
+            Класс управления настройками режима работы меню
+            </summary>
+        </member>
+        <member name="M:MenuStucture.MenuPageSettings.#ctor(MenuStucture.NavigationMode,MenuStucture.DisabledItemSelectionMode)">
+            <summary>
+            Создание экземпляра <see cref="T:MenuStucture.MenuPageSettings"/>
+            </summary>
+            <param name="navigationMode">Режим навигации меню</param>
+            <param name="disabledItemSelectionMode">Режим работы с неактивной командой меню</param>
+        </member>
+        <member name="P:MenuStucture.MenuPageSettings.NavigationMode">
+            <summary>
+            Режим навигации
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuPageSettings.DisabledItemSelectionMode">
+            <summary>
+            Режим работы с неактивной командой меню
+            </summary>
+        </member>
+        <member name="T:MenuStucture.MenuTheme">
+            <summary>
+            Класс для создания темы меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.HorisontalLineElement">
+            <summary>
+            Горизонтальная линия
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.VerticalLineElement">
+            <summary>
+            Вертикальная линия
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.LeftBottomCorner">
+            <summary>
+            Левый нижний угол
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.RightBottomCorner">
+            <summary>
+            Правый нижний угол
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.LeftUpperCorner">
+            <summary>
+            Левый верхний угол
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.RightUpperCorner">
+            <summary>
+            Правый верхний угол
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.LeftInnerCorner">
+            <summary>
+            Левый внутренний угол
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.RightInnerCorner">
+            <summary>
+            Правый внутренний угол
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.IndicatorActivatedMenuItem">
+            <summary>
+            Индикатор активированной команды
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.FrameColor">
+            <summary>
+            Цвет рамки меню
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.TextColor">
+            <summary>
+            Цвет текста
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.BackgroundColor">
+            <summary>
+            Цвет фона
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.SelectedTextColor">
+            <summary>
+            Цвет текста выделенной команды
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.CursorColor">
+            <summary>
+            Цвет курсора
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.DisabledTextColor">
+            <summary>
+            Цвет текста неактивной команды
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.DisabledBackgroundColor">
+            <summary>
+            Цвет фона неактивной команды
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.SelectedDisabledTextColor">
+            <summary>
+            Цвет текста выделенной неактивной команды
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.SelectedDisabledBackgroundColor">
+            <summary>
+            Цвет фона выделенной неактивной команды
+            </summary>
+        </member>
+        <member name="P:MenuStucture.MenuTheme.Indent">
+            <summary>
+            Отступ слева и справа от имени команды до рамки меню
+            </summary>
+        </member>
+    </members>
+</doc>

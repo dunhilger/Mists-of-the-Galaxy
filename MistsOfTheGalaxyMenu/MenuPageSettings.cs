@@ -1,4 +1,4 @@
-﻿namespace MistsOfTheGalaxyMenu
+﻿namespace MenuStucture
 {
     /// <summary>
     /// Класс управления настройками режима работы меню

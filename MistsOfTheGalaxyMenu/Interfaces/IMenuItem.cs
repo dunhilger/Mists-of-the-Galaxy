@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MistsOfTheGalaxyMenu.Interfaces
+namespace MenuStucture.Interfaces
 {
     /// <summary>
     /// Интерфейс команды меню

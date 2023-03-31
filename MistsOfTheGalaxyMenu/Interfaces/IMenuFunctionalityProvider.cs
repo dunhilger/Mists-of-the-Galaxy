@@ -1,4 +1,4 @@
-﻿namespace MistsOfTheGalaxyMenu.Interfaces
+﻿namespace MenuStucture.Interfaces
 {
     /// <summary>
     /// Интерфейс класса - поставщика функционала меню
@@ -23,8 +23,8 @@
         /// <summary>
         /// Переход к следующей странице меню
         /// </summary>
-        /// <param name="menuPageItemList">Список команд следующей страницы меню</param>
-        void NavigateToNextPage(MenuPageItemList menuPageItemList);
+        /// <param name="MenuPageItemList">Список команд следующей страницы меню</param>
+        void NavigateToNextPage(MenuPageItemList MenuPageItemList);
 
         /// <summary>
         /// Устанавливает тему меню.

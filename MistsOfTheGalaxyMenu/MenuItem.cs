@@ -1,7 +1,7 @@
-﻿using MistsOfTheGalaxyMenu.Interfaces;
+﻿using MenuStucture.Interfaces;
 using System;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
     /// <summary>
     /// Класс для создания команды меню

@@ -1,54 +1,12 @@
 ﻿using System;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
-    /// <summary>
-    /// Перечисление режимов работы курсора с неактивной командой меню
-    /// </summary>
-    public enum DisabledItemSelectionMode : byte
-    {
-        /// <summary>
-        /// Режим пропуска
-        /// </summary>
-        Skip = 0,
-
-        /// <summary>
-        /// Режим выделения
-        /// </summary>
-        Select = 1
-    }
-
-    /// <summary>
-    /// Перечисление режимов работы навигации курсора
-    /// </summary>
-    public enum NavigationMode : byte
-    {
-        /// <summary>
-        /// Нециклический
-        /// </summary>
-        LoopOff = 0,
-
-        /// <summary>
-        /// Циклический
-        /// </summary>
-        LoopOn = 1
-    }
-
     /// <summary>
     /// Класс для создания темы меню
     /// </summary>
     public class MenuTheme
     {
-        /// <summary>
-        /// Режим навигации курсора
-        /// </summary>
-        public NavigationMode NavigationMode { get; set; } = NavigationMode.LoopOn;
-
-        /// <summary>
-        /// Режим работы курсора с неактивной командой меню
-        /// </summary>
-        public DisabledItemSelectionMode DisabledItemSelectionMode { get; set; } = DisabledItemSelectionMode.Skip;
-
         /// <summary>
         /// Горизонтальная линия
         /// </summary>
@@ -115,9 +73,9 @@ namespace MistsOfTheGalaxyMenu
         public ConsoleColor SelectedTextColor { get; set; } = ConsoleColor.Black;
 
         /// <summary>
-        /// Цвет фона выделенной команды
+        /// Цвет курсора
         /// </summary>
-        public ConsoleColor SelectedBackgroundColor { get; set; } = ConsoleColor.White; 
+        public ConsoleColor CursorColor { get; set; } = ConsoleColor.White; 
 
         /// <summary>
         /// Цвет текста неактивной команды

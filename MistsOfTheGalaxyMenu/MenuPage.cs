@@ -1,39 +1,39 @@
-﻿using MistsOfTheGalaxyMenu.Interfaces;
+﻿using MenuStucture.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
     /// <summary>
     /// Класс создания страницы меню
     /// </summary>
     public class MenuPage
     {
-        private readonly MenuPageItemList _menuPageItemList;
+        private readonly MenuPageItemList _MenuPageItemList;
 
-        private readonly MenuPageSettings _menuPageSettings;
+        private readonly MenuPageSettings _MenuPageSettings;
 
-        private readonly MenuFunctionalityProvider _menuFunctionalityProvider;
+        private readonly MenuFunctionalityProvider _MenuFunctionalityProvider;
 
         /// <summary>
         /// Создание экземпляра <see cref="MenuPage"/>
         /// </summary>
-        /// <param name="menuPageItemList">Экземпляр класса <see cref="MenuPageItemList"/></param>
-        /// <param name="menuPageSettings">Экземпляр класса <see cref="MenuPageSettings"/></param>
-        /// <param name="menuFunctionalityProvider">Экземпляр класса <see cref="MenuFunctionalityProvider"/></param>
-        public MenuPage(MenuPageItemList menuPageItemList,
-            MenuPageSettings menuPageSettings,
-            MenuFunctionalityProvider menuFunctionalityProvider)
+        /// <param name="MenuPageItemList">Экземпляр класса <see cref="MenuPageItemList"/></param>
+        /// <param name="MenuPageSettings">Экземпляр класса <see cref="MenuPageSettings"/></param>
+        /// <param name="MenuFunctionalityProvider">Экземпляр класса <see cref="MenuFunctionalityProvider"/></param>
+        public MenuPage(MenuPageItemList MenuPageItemList,
+            MenuPageSettings MenuPageSettings,
+            MenuFunctionalityProvider MenuFunctionalityProvider)
         {
-            _menuPageItemList = menuPageItemList;
+            _MenuPageItemList = MenuPageItemList;
 
-            IndicatedMenuItem = menuPageItemList?.IsIndicate;
+            IndicatedMenuItem = MenuPageItemList?.IsIndicate;
 
-            MenuItems = _menuPageItemList?.MenuItems ?? throw new ArgumentNullException(nameof(menuPageItemList));
+            MenuItems = _MenuPageItemList?.MenuItems ?? throw new ArgumentNullException(nameof(MenuPageItemList));
 
-            _menuPageSettings = menuPageSettings;
+            _MenuPageSettings = MenuPageSettings;
 
-            _menuFunctionalityProvider = menuFunctionalityProvider;
+            _MenuFunctionalityProvider = MenuFunctionalityProvider;
 
             SetCursorPosition();
         }
@@ -77,7 +77,7 @@ namespace MistsOfTheGalaxyMenu
 
                 if (index < 0)
                 {
-                    switch (_menuPageSettings.NavigationMode)
+                    switch (_MenuPageSettings.NavigationMode)
                     {
                         case NavigationMode.LoopOff:
                             index++;
@@ -102,7 +102,7 @@ namespace MistsOfTheGalaxyMenu
 
                 if (index > MenuItems.Count - 1)
                 {
-                    switch (_menuPageSettings.NavigationMode)
+                    switch (_MenuPageSettings.NavigationMode)
                     {
                         case NavigationMode.LoopOff:
                             index--;
@@ -123,13 +123,13 @@ namespace MistsOfTheGalaxyMenu
         {
             if (SelectedMenuItem is not null && SelectedMenuItem.IsEnabled)
             {
-                if (SelectedMenuItem is MenuItemOptional menuItemOptional)
+                if (SelectedMenuItem is MenuItemOptional MenuItemOptional)
                 {
-                    _menuPageItemList.IsIndicate = menuItemOptional;
-                    IndicatedMenuItem = _menuPageItemList.IsIndicate;
+                    _MenuPageItemList.IsIndicate = MenuItemOptional;
+                    IndicatedMenuItem = _MenuPageItemList.IsIndicate;
                 }
 
-                SelectedMenuItem.NavigatorAction?.Invoke(_menuFunctionalityProvider);
+                SelectedMenuItem.NavigatorAction?.Invoke(_MenuFunctionalityProvider);
             }
         }
 
@@ -147,7 +147,7 @@ namespace MistsOfTheGalaxyMenu
 
                 i = getIndex(i);
 
-                if (_menuPageSettings.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
+                if (_MenuPageSettings.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
                 {
                     if (i == cursorPosition.Value || MenuItems[i].IsEnabled)
                     {
@@ -171,7 +171,7 @@ namespace MistsOfTheGalaxyMenu
         {
             for (int i = 0; i < MenuItems.Count; i++)
             {
-                if (_menuPageSettings.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
+                if (_MenuPageSettings.DisabledItemSelectionMode == DisabledItemSelectionMode.Skip)
                 {
                     if (MenuItems[i].IsEnabled)
                     {

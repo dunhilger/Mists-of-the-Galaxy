@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
     /// <summary>
     /// Класс для построения меню в консоли
@@ -9,15 +9,15 @@ namespace MistsOfTheGalaxyMenu
     {
         private static void ResetColorMenuItem() => Console.ResetColor();
 
-        private readonly Menu _menu;
+        private readonly Menu _Menu;
 
         /// <summary>
         /// Создание экземпляра <see cref="ConsoleMenuBuilder"/>
         /// </summary>
-        /// <param name="menu">Объект меню</param>
-        public ConsoleMenuBuilder(Menu menu)
+        /// <param name="Menu">Объект меню</param>
+        public ConsoleMenuBuilder(Menu Menu)
         {
-            _menu = menu;
+            _Menu = Menu;
         }
 
         /// <summary>
@@ -25,36 +25,36 @@ namespace MistsOfTheGalaxyMenu
         /// </summary>
         public void RenderMenuPage()
         {
-            if (_menu.MenuItems.Count > 0)
+            if (_Menu.MenuItems.Count > 0)
             {
-                String line = new(_menu.Theme.HorisontalLineElement, _menu.MenuWidth);
+                String line = new(_Menu.Theme.HorisontalLineElement, _Menu.MenuWidth);
                 SetFrameColor();
-                Console.WriteLine($"{_menu.Theme.LeftUpperCorner}{line}{_menu.Theme.RightUpperCorner}");
+                Console.WriteLine($"{_Menu.Theme.LeftUpperCorner}{line}{_Menu.Theme.RightUpperCorner}");
 
-                for (int i = 0; i < _menu.MenuItems.Count; i++)
+                for (int i = 0; i < _Menu.MenuItems.Count; i++)
                 {
-                    int diff = line.Length - _menu.MenuItems[i].Name.Length;
+                    int diff = line.Length - _Menu.MenuItems[i].Name.Length;
 
-                    if (_menu.IndicatedMenuItem is not null && _menu.MenuItems[i] == _menu.IndicatedMenuItem)
+                    if (_Menu.IndicatedMenuItem is not null && _Menu.MenuItems[i] == _Menu.IndicatedMenuItem)
                     {
-                        diff = line.Length - (_menu.IndicatedMenuItem.Name.Length + _menu.Theme.IndicatorActivatedMenuItem.ToString().Length);
+                        diff = line.Length - (_Menu.IndicatedMenuItem.Name.Length + _Menu.Theme.IndicatorActivatedMenuItem.ToString().Length);
                     }
 
                     String leftShift = new(' ', diff / 2);
                     String rightShift = new(' ', diff - leftShift.Length);
 
-                    Console.Write($"{_menu.Theme.VerticalLineElement}");
+                    Console.Write($"{_Menu.Theme.VerticalLineElement}");
 
-                    if (_menu.MenuItems[i].IsEnabled)
+                    if (_Menu.MenuItems[i].IsEnabled)
                     {
-                        if (_menu.SelectedMenuItem == _menu.MenuItems[i])
+                        if (_Menu.SelectedMenuItem == _Menu.MenuItems[i])
                             SetSelectedItemColors();
                         else
                             SetNormalItemColors();
                     }
                     else
                     {
-                        if (_menu.SelectedMenuItem == _menu.MenuItems[i])
+                        if (_Menu.SelectedMenuItem == _Menu.MenuItems[i])
                             SetSelectedDisabledItemColors();
                         else
                             SetDisabledItemColors();
@@ -62,31 +62,31 @@ namespace MistsOfTheGalaxyMenu
 
                     Console.Write($"{leftShift}");
 
-                    if (_menu.MenuItems[i] == _menu.IndicatedMenuItem)
+                    if (_Menu.MenuItems[i] == _Menu.IndicatedMenuItem)
                     {
-                        Console.Write($"{_menu.IndicatedMenuItem?.Name}{_menu.Theme.IndicatorActivatedMenuItem}");
+                        Console.Write($"{_Menu.IndicatedMenuItem?.Name}{_Menu.Theme.IndicatorActivatedMenuItem}");
                     }
                     else
                     {
-                        Console.Write($"{_menu.MenuItems[i].Name}");
+                        Console.Write($"{_Menu.MenuItems[i].Name}");
                     }
 
                     Console.Write($"{rightShift}");
 
                     ResetColorMenuItem();
                     SetFrameColor();
-                    Console.WriteLine($"{_menu.Theme.VerticalLineElement}");
+                    Console.WriteLine($"{_Menu.Theme.VerticalLineElement}");
 
-                    if (i < _menu.MenuItems.Count - 1)
+                    if (i < _Menu.MenuItems.Count - 1)
                     {
-                        Console.WriteLine($"{_menu.Theme.LeftInnerCorner}{line}{_menu.Theme.RightInnerCorner}");
+                        Console.WriteLine($"{_Menu.Theme.LeftInnerCorner}{line}{_Menu.Theme.RightInnerCorner}");
                     }
                 }
-                Console.WriteLine($"{_menu.Theme.LeftBottomCorner}{line}{_menu.Theme.RightBottomCorner}");
+                Console.WriteLine($"{_Menu.Theme.LeftBottomCorner}{line}{_Menu.Theme.RightBottomCorner}");
             }
             else
             {
-                Console.WriteLine("no menu");
+                Console.WriteLine("no Menu");
             }
         }
 
@@ -103,46 +103,46 @@ namespace MistsOfTheGalaxyMenu
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.NumPad6:
-                    _menu.NavigateDown();
+                    _Menu.NavigateDown();
                     break;
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad4:
-                    _menu.NavigateUp();
+                    _Menu.NavigateUp();
                     break;
                 case ConsoleKey.Enter:
-                    _menu.ActivateItem();
+                    _Menu.ActivateItem();
                     break;
                 case ConsoleKey.Backspace:
-                    _menu.TurnToPreviousPage();
+                    _Menu.TurnToPreviousPage();
                     break;
             }
         }
 
         private void SetSelectedItemColors()
         {
-            Console.ForegroundColor = _menu.Theme.SelectedTextColor;
-            Console.BackgroundColor = _menu.Theme.SelectedBackgroundColor;
+            Console.ForegroundColor = _Menu.Theme.SelectedTextColor;
+            Console.BackgroundColor = _Menu.Theme.CursorColor;
         }
 
         private void SetDisabledItemColors()
         {
-            Console.BackgroundColor = _menu.Theme.DisabledBackgroundColor;
-            Console.ForegroundColor = _menu.Theme.DisabledTextColor;
+            Console.BackgroundColor = _Menu.Theme.DisabledBackgroundColor;
+            Console.ForegroundColor = _Menu.Theme.DisabledTextColor;
         }
 
         private void SetNormalItemColors()
         {
-            Console.ForegroundColor = _menu.Theme.TextColor;
-            Console.BackgroundColor = _menu.Theme.BackgroundColor;
+            Console.ForegroundColor = _Menu.Theme.TextColor;
+            Console.BackgroundColor = _Menu.Theme.BackgroundColor;
         }
 
         private void SetSelectedDisabledItemColors()
         {
-            Console.ForegroundColor = _menu.Theme.SelectedDisabledTextColor;
-            Console.BackgroundColor = _menu.Theme.SelectedDisabledBackgroundColor;
+            Console.ForegroundColor = _Menu.Theme.SelectedDisabledTextColor;
+            Console.BackgroundColor = _Menu.Theme.SelectedDisabledBackgroundColor;
         }
-        private void SetFrameColor() => Console.ForegroundColor = _menu.Theme.FrameColor;
+        private void SetFrameColor() => Console.ForegroundColor = _Menu.Theme.FrameColor;
     }
 }

@@ -1,8 +1,8 @@
-﻿using MistsOfTheGalaxyMenu.Interfaces;
+﻿using MenuStucture.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace MistsOfTheGalaxyMenu
+namespace MenuStucture
 {
     /// <summary>
     /// Класс для создания списка команд страницы меню
@@ -12,10 +12,10 @@ namespace MistsOfTheGalaxyMenu
         /// <summary>
         /// Создание экземпляра <see cref="MenuPageItemList"/>
         /// </summary>
-        /// <param name="menuItems">Список команд страницы меню</param>
-        public MenuPageItemList(List<IMenuItem> menuItems)
+        /// <param name="MenuItems">Список команд страницы меню</param>
+        public MenuPageItemList(List<IMenuItem> MenuItems)
         {
-            MenuItems = menuItems ?? throw new ArgumentNullException(nameof(menuItems));
+            this.MenuItems = MenuItems ?? throw new ArgumentNullException(nameof(MenuItems));
         }
 
         /// <summary>

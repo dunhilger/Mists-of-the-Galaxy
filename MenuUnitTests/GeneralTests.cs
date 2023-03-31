@@ -1,5 +1,5 @@
-﻿using MistsOfTheGalaxyMenu;
-using MistsOfTheGalaxyMenu.Interfaces;
+﻿using MenuStucture;
+using MenuStucture.Interfaces;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,11 +33,11 @@ namespace MenuUnitTests
         [Test]
         public void Get_MenuWidth_Test(List<IMenuItem> list, int expectedResult)
         {
-            var menuTheme = new MenuTheme();
-            var menuPageItemList = new MenuPageItemList(list);
-            var menu = new Menu(menuPageItemList, menuTheme);
+            var MenuTheme = new MenuTheme();
+            var MenuPageItemList = new MenuPageItemList(list);
+            var Menu = new Menu(MenuPageItemList, MenuTheme);
 
-            Assert.AreEqual(expectedResult, menu.MenuWidth);
+            Assert.AreEqual(expectedResult, Menu.MenuWidth);
         }
 
         public static IEnumerable<TestCaseData> MenuItems_TestDataCase
@@ -70,28 +70,28 @@ namespace MenuUnitTests
         [Test]
         public void Theme_Test()
         {
-            var menuTheme = new MenuTheme();
-            var menu = new Menu(new MenuPageItemList(new List<IMenuItem>()), menuTheme);
+            var MenuTheme = new MenuTheme();
+            var Menu = new Menu(new MenuPageItemList(new List<IMenuItem>()), MenuTheme);
 
-            Assert.AreEqual(menuTheme, menu.Theme);
+            Assert.AreEqual(MenuTheme, Menu.Theme);
         }
 
         [Test]
         public void Menu_Default_Theme_Test()
         {
-            var menu = new Menu(new MenuPageItemList(new List<IMenuItem>()));
+            var Menu = new Menu(new MenuPageItemList(new List<IMenuItem>()));
 
-            Assert.NotNull(menu.Theme);
+            Assert.NotNull(Menu.Theme);
         }
 
         [Test]
         public void Menu_Test()
         {
-            var menuTheme = new MenuTheme();
+            var MenuTheme = new MenuTheme();
 
             Assert.Throws<ArgumentNullException>(() =>
             {
-                var menu = new Menu(null, menuTheme);
+                var Menu = new Menu(null, MenuTheme);
             });
         }        
     }
